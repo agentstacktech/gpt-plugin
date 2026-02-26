@@ -22,6 +22,7 @@ AgentStack is a full backend ecosystem: 8DNA hierarchical data, Rules Engine, Bu
 
 ## Documentation
 
+- **This plugin:** [github.com/agentstacktech/gpt-plugin](https://github.com/agentstacktech/gpt-plugin)
 - **Quick Start:** [GPT_QUICKSTART.md](GPT_QUICKSTART.md)
 - **Full MCP tool list:** [MCP Server Capabilities](https://github.com/agentstack/agentstack/blob/main/docs/MCP_SERVER_CAPABILITIES.md) in the main AgentStack repo
 - **Plugins index and comparison (Cursor, Claude, GPT, VS Code):** [docs/plugins/README.md](https://github.com/agentstack/agentstack/blob/main/docs/plugins/README.md) in the main repo
