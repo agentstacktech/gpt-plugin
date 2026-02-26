@@ -1,0 +1,111 @@
+openapi: 3.1.0
+info:
+  title: AgentStack MCP API
+  description: 'AgentStack backend ecosystem: 8DNA hierarchical data, Rules Engine,
+    Buffs (trials/subscriptions), Payments, and 60+ MCP tools (Projects, Auth, Scheduler,
+    Analytics, Webhooks, Notifications, Wallets). This is the single entry point to
+    execute any MCP tool by name with parameters. Registered tools (generated from
+    MCP_TOOLS_REGISTRY):
+
+
+    - analytics.*: analytics.get_metrics, analytics.get_usage (2 tools)
+
+    - apikeys.*: apikeys.create, apikeys.delete, apikeys.list (3 tools)
+
+    - assets.*: assets.create, assets.get, assets.list, assets.update (4 tools)
+
+    - auth.*: auth.get_profile, auth.login, auth.register, auth.update_profile (4
+    tools)
+
+    - buffs.*: buffs.apply_buff, buffs.apply_persistent_effect, buffs.apply_temporary_effect,
+    buffs.cancel_buff, buffs.create_buff... (10 tools)
+
+    - commands.*: commands.execute, commands.execute_batch (2 tools)
+
+    - logic.*: logic.create, logic.delete, logic.execute, logic.flush_batch, logic.get...
+    (9 tools)
+
+    - payments.*: payments.create, payments.get, payments.get_balance, payments.list_transactions,
+    payments.refund (5 tools)
+
+    - processors.*: processors.execute, processors.get_metadata, processors.list (3
+    tools)
+
+    - projects.*: projects.create_project, projects.create_project_anonymous, projects.delete_project,
+    projects.get_project, projects.get_projects... (8 tools)
+
+    - scheduler.*: scheduler.cancel_task, scheduler.clear_pool_tasks, scheduler.create_task,
+    scheduler.delete_pool_task, scheduler.execute_task... (11 tools)
+
+
+    Full tool list and parameter schemas: see MCP_SERVER_CAPABILITIES in the AgentStack
+    repo.'
+  version: 0.4.0
+  contact:
+    name: AgentStack
+servers:
+- url: https://agentstack.tech
+  description: Production MCP server
+paths:
+  /mcp:
+    post:
+      operationId: execute_tool
+      summary: Execute an AgentStack MCP tool
+      description: 'Call any registered MCP tool by name with its parameters. Examples:
+        projects.create_project_anonymous, projects.get_projects, projects.get_stats,
+        auth.*, logic.*, buffs.*, etc. See MCP_SERVER_CAPABILITIES for the full list
+        and parameter schemas.'
+      security:
+      - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - tool
+              properties:
+                tool:
+                  type: string
+                  description: Full MCP tool name (e.g. projects.create_project_anonymous,
+                    projects.get_projects).
+                params:
+                  type: object
+                  description: Key-value parameters for the tool. Schema depends on
+                    the tool; see MCP_SERVER_CAPABILITIES.
+                  additionalProperties: true
+            examples:
+              create_project:
+                summary: Create anonymous project
+                value:
+                  tool: projects.create_project_anonymous
+                  params:
+                    name: My GPT Project
+              get_projects:
+                summary: List projects
+                value:
+                  tool: projects.get_projects
+                  params: {}
+      responses:
+        '200':
+          description: Tool executed successfully. Response shape depends on the tool.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Tool result (success, data, or error details).
+        '400':
+          description: Bad request (e.g. missing tool name or invalid params).
+        '401':
+          description: Missing or invalid API key.
+        '404':
+          description: Tool name not found in registry.
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key from AgentStack (anonymous project or account). Get one
+        via MCP_QUICKSTART.
