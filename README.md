@@ -8,7 +8,7 @@ AgentStack is a full backend ecosystem: 8DNA hierarchical data, Rules Engine, Bu
 
 | Item | Description |
 |------|-------------|
-| **OpenAPI schema** | `openapi/agentstack-mcp.yaml` — one action (execute MCP tool) for GPT Actions; API Key auth. |
+| **OpenAPI schema** | `openapi/agentstack-mcp.yaml` — one action (execute MCP tool) for GPT Actions; supports API Key and OAuth2 auth modes. |
 | **Instructions** | `GPT_INSTRUCTIONS.md` — copy into your Custom GPT Instructions field. |
 | **Quick Start** | `GPT_QUICKSTART.md` — get API key, create Custom GPT, add Action, paste instructions. |
 | **Artifact layout** | `ARTIFACTS.md` — where each file lives and what it’s for. |
@@ -16,7 +16,9 @@ AgentStack is a full backend ecosystem: 8DNA hierarchical data, Rules Engine, Bu
 ## Quick Start
 
 1. Get an API key (anonymous project or account) — see [GPT_QUICKSTART.md](GPT_QUICKSTART.md).
-2. Create a Custom GPT and add an Action with the OpenAPI schema; set Authentication to API Key, header `X-API-Key`.
+2. Create a Custom GPT and add an Action with the OpenAPI schema; choose authentication mode:
+   - API Key (`X-API-Key`) for service-style access.
+   - OAuth2 (AgentStack as IdP) for end-user sign-in.
 3. Paste the instructions from [GPT_INSTRUCTIONS.md](GPT_INSTRUCTIONS.md).
 4. Use the GPT (e.g. “Create a project called Test”, “List my projects”).
 

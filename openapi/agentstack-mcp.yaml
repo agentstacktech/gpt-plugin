@@ -57,6 +57,8 @@ paths:
         and parameter schemas.'
       security:
       - ApiKeyAuth: []
+      - OAuth2Auth:
+        - mcp.tools.execute
       requestBody:
         required: true
         content:
@@ -98,7 +100,7 @@ paths:
         '400':
           description: Bad request (e.g. missing tool name or invalid params).
         '401':
-          description: Missing or invalid API key.
+          description: Missing or invalid API key/OAuth token.
         '404':
           description: Tool name not found in registry.
 components:
@@ -109,3 +111,16 @@ components:
       name: X-API-Key
       description: API key from AgentStack (anonymous project or account). Get one
         via MCP_QUICKSTART.
+    OAuth2Auth:
+      type: oauth2
+      description: >-
+        OAuth2 Authorization Code + PKCE flow via the AgentStack MCP OAuth server.
+        Discovery: GET https://agentstack.tech/mcp/.well-known/oauth-authorization-server
+      flows:
+        authorizationCode:
+          authorizationUrl: https://agentstack.tech/mcp/.well-known/oauth-authorize
+          tokenUrl: https://agentstack.tech/mcp/.well-known/oauth-token
+          scopes:
+            openid: OpenID identity
+            tools:read: Read available MCP tools
+            tools:invoke: Invoke MCP tools
