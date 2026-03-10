@@ -53,5 +53,5 @@ Use this to verify the GPT integration end-to-end.
 
 Exact tool names and parameters:
 
-- **MCP Server Capabilities** in the AgentStack repo: [docs/MCP_SERVER_CAPABILITIES.md](https://github.com/agentstack/agentstack/blob/main/docs/MCP_SERVER_CAPABILITIES.md)
+- **MCP Server Capabilities** in the AgentStack repo: [docs/MCP_SERVER_CAPABILITIES.md](https://github.com/agentstacktech/AgentStack/blob/main/docs/MCP_SERVER_CAPABILITIES.md)
 - Live list (with API key): `GET https://agentstack.tech/mcp/tools`

@@ -96,7 +96,7 @@ When submitting your app, OpenAI may ask you to justify the **annotations** for 
 
 For all 60+ tools (Projects, Auth, Payments, Scheduler, Analytics, Rules, Webhooks, Notifications, Wallets), see:
 
-- [MCP Server Capabilities](https://github.com/agentstack/agentstack/blob/main/docs/MCP_SERVER_CAPABILITIES.md) (in the AgentStack repo)
+- [MCP Server Capabilities](https://github.com/agentstacktech/AgentStack/blob/main/docs/MCP_SERVER_CAPABILITIES.md) (in the AgentStack repo)
 
 ## Self-hosted MCP
 
