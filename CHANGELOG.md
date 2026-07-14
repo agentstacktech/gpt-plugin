@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - OpenAPI 3.1 schema `openapi/agentstack-mcp.yaml`: single operation `execute_tool` (POST /mcp), API Key auth (X-API-Key).
 - `GPT_INSTRUCTIONS.md`: Context, Instructions, and Additional notes for Custom GPT.
 - `GPT_QUICKSTART.md`: get API key, create Custom GPT, add Action, paste instructions, example prompts.
-- `README.md`: purpose, artifact list, Quick Start, links to MCP_SERVER_CAPABILITIES and plugin comparison.
+- `README.md`: purpose, artifact list, Quick Start, links to MCP_CAPABILITY_MATRIX and plugin comparison.
 - `ARTIFACTS.md`: artifact layout and backend (MCP URL, auth).
 - `openapi/SCHEMA_VALIDATION.md`: GPT Actions compatibility checklist.
 - `TESTING_AND_CAPABILITIES.md`: manual checklist, scenarios, link to full tool list.

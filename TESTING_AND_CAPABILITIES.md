@@ -6,10 +6,10 @@ Use this to verify the GPT integration end-to-end.
 
 ### 1. Create Custom GPT (per Quick Start)
 
-- [ ] API key obtained (anonymous project via `curl` to `POST https://agentstack.tech/mcp` with `projects.create_project_anonymous`, or from account).
+- [ ] API key or OAuth configured (anonymous project via `projects.create_project_anonymous`, account dashboard, or OAuth where enabled for the GPT Action).
 - [ ] Custom GPT created in ChatGPT; Name and Description set.
 - [ ] Action added: OpenAPI schema from `openapi/agentstack-mcp.yaml` pasted (or URL used).
-- [ ] Authentication set to API Key, header `X-API-Key`, key pasted.
+- [ ] Authentication set to API Key (`X-API-Key`) or OAuth as appropriate.
 - [ ] Instructions from `GPT_INSTRUCTIONS.md` pasted into the Custom GPT Instructions field.
 - [ ] Custom GPT saved.
 
@@ -23,7 +23,7 @@ Use this to verify the GPT integration end-to-end.
 
 - [ ] “List my AgentStack projects” → `projects.get_projects` is called and results shown.
 - [ ] “Get stats for project &lt;id&gt;” → `projects.get_stats` is called.
-- [ ] On invalid or missing API key, GPT suggests checking Action Authentication and MCP_SERVER_CAPABILITIES.
+- [ ] On invalid or missing credential, GPT suggests checking Action Authentication and `MCP_CAPABILITY_MATRIX`.
 
 ### 4. CORS and availability
 
@@ -33,8 +33,8 @@ Use this to verify the GPT integration end-to-end.
 
 ## What was tested
 
-- Schema: OpenAPI 3.1 with one operation `execute_tool`, API Key auth; compatibility noted in `openapi/SCHEMA_VALIDATION.md`.
-- Instructions: Context, steps, and notes aligned with projects and MCP tool names; reference to MCP_SERVER_CAPABILITIES for full list.
+- Schema: OpenAPI 3.1 with `list_actions` (non-consequential) and `execute_tool` (`x-openai-isConsequential: true`); API Key/OAuth auth; compatibility noted in `openapi/SCHEMA_VALIDATION.md`.
+- Instructions: Context, steps, and notes aligned with live MCP action names; reference to `MCP_CAPABILITY_MATRIX` for full list.
 
 ---
 
@@ -45,7 +45,7 @@ Use this to verify the GPT integration end-to-end.
 | “Create a project called X” | `execute_tool` with `tool: projects.create_project_anonymous`, `params: { "name": "X" }`. |
 | “List my projects” | `execute_tool` with `tool: projects.get_projects`, `params: {}`. |
 | “Stats for project 1025” | `execute_tool` with `tool: projects.get_stats`, `params: { "project_id": 1025 }`. |
-| “What can AgentStack do?” | Answer describing projects, auth, rules, buffs, payments, etc., and link to MCP_SERVER_CAPABILITIES. |
+| “What can AgentStack do?” | Use `list_actions` if needed; answer describing projects, auth, rules, buffs, payments, agents, storage, support, etc., and link to `MCP_CAPABILITY_MATRIX`. |
 
 ---
 
@@ -53,5 +53,13 @@ Use this to verify the GPT integration end-to-end.
 
 Exact tool names and parameters:
 
-- **MCP Server Capabilities** in the AgentStack repo: [docs/MCP_SERVER_CAPABILITIES.md](https://github.com/agentstacktech/AgentStack/blob/main/docs/MCP_SERVER_CAPABILITIES.md)
-- Live list (with API key): `GET https://agentstack.tech/mcp/tools`
+- **Capability Matrix** in the AgentStack repo: [docs/MCP_CAPABILITY_MATRIX.md](https://github.com/agentstacktech/AgentStack/blob/master/docs/MCP_CAPABILITY_MATRIX.md)
+- Live list: `GET https://agentstack.tech/mcp/actions`
+- Eval prompts: [EVAL_PROMPTS.md](EVAL_PROMPTS.md)
+
+## Latest Local Smoke Snapshot
+
+2026-05-11:
+
+- `node provided_plugins/scripts/validate-all-plugins.mjs` — passed with 3 warnings for Cursor placeholder screenshots.
+- GPT OpenAPI schema was checked by the shared validator for OpenAPI 3.1, `execute_tool`, and `x-openai-isConsequential`.

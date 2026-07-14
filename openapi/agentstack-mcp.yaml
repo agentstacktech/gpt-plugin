@@ -2,45 +2,12 @@ openapi: 3.1.0
 info:
   title: AgentStack MCP API
   description: 'AgentStack backend ecosystem: 8DNA hierarchical data, Rules Engine,
-    Buffs (trials/subscriptions), Payments, and 60+ MCP tools (Projects, Auth, Scheduler,
-    Analytics, Webhooks, Notifications, Wallets). This is the single entry point to
-    execute any MCP tool by name with parameters. Registered tools (generated from
-    MCP_TOOLS_REGISTRY):
-
-
-    - analytics.*: analytics.get_metrics, analytics.get_usage (2 tools)
-
-    - apikeys.*: apikeys.create, apikeys.delete, apikeys.list (3 tools)
-
-    - assets.*: assets.create, assets.get, assets.list, assets.update (4 tools)
-
-    - auth.*: auth.get_profile, auth.login, auth.register, auth.update_profile (4
-    tools)
-
-    - buffs.*: buffs.apply_buff, buffs.apply_persistent_effect, buffs.apply_temporary_effect,
-    buffs.cancel_buff, buffs.create_buff... (10 tools)
-
-    - commands.*: commands.execute, commands.execute_batch (2 tools)
-
-    - logic.*: logic.create, logic.delete, logic.execute, logic.flush_batch, logic.get...
-    (9 tools)
-
-    - payments.*: payments.create, payments.get, payments.get_balance, payments.list_transactions,
-    payments.refund (5 tools)
-
-    - processors.*: processors.execute, processors.get_metadata, processors.list (3
-    tools)
-
-    - projects.*: projects.create_project, projects.create_project_anonymous, projects.delete_project,
-    projects.get_project, projects.get_projects... (8 tools)
-
-    - scheduler.*: scheduler.cancel_task, scheduler.clear_pool_tasks, scheduler.create_task,
-    scheduler.delete_pool_task, scheduler.execute_task... (11 tools)
-
-
-    Full tool list and parameter schemas: see MCP_SERVER_CAPABILITIES in the AgentStack
-    repo.'
-  version: 0.4.0
+    Buffs (trials/subscriptions), Payments, Agents Fleet, AI Builder, Storage, Support,
+    RAG, and one MCP tool (agentstack.execute). The generated action catalog is the
+    source of truth: call GET /mcp/actions or consult docs/MCP_CAPABILITY_MATRIX.md.
+    Keep this OpenAPI small for GPT Actions: discover first, then execute exact action
+    names through POST /mcp.'
+  version: 0.4.11
   contact:
     name: AgentStack
 servers:
@@ -51,14 +18,15 @@ paths:
     post:
       operationId: execute_tool
       summary: Execute an AgentStack MCP tool
-      description: 'Call any registered MCP tool by name with its parameters. Examples:
-        projects.create_project_anonymous, projects.get_projects, projects.get_stats,
-        auth.*, logic.*, buffs.*, etc. See MCP_SERVER_CAPABILITIES for the full list
-        and parameter schemas.'
+      description: 'Call a registered AgentStack action by exact name with parameters.
+        Discover allowed action names first with list_actions or docs/MCP_CAPABILITY_MATRIX.md.
+        Ask the user for confirmation before destructive, money-moving, or access-changing
+        mutations.'
+      x-openai-isConsequential: true
       security:
       - ApiKeyAuth: []
       - OAuth2Auth:
-        - mcp.tools.execute
+        - mcp:execute
       requestBody:
         required: true
         content:
@@ -75,7 +43,7 @@ paths:
                 params:
                   type: object
                   description: Key-value parameters for the tool. Schema depends on
-                    the tool; see MCP_SERVER_CAPABILITIES.
+                    the tool; discover via GET /mcp/actions or MCP_CAPABILITY_MATRIX.
                   additionalProperties: true
             examples:
               create_project:
@@ -103,6 +71,26 @@ paths:
           description: Missing or invalid API key/OAuth token.
         '404':
           description: Tool name not found in registry.
+  /mcp/actions:
+    get:
+      operationId: list_actions
+      summary: List available AgentStack MCP actions
+      description: Discovery endpoint for action names, summaries, categories, and required capabilities. Use before executing an unfamiliar action.
+      x-openai-isConsequential: false
+      security:
+      - ApiKeyAuth: []
+      - OAuth2Auth:
+        - mcp:execute
+      responses:
+        '200':
+          description: Action catalog returned successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -114,13 +102,13 @@ components:
     OAuth2Auth:
       type: oauth2
       description: >-
-        OAuth2 Authorization Code + PKCE flow via the AgentStack MCP OAuth server.
-        Discovery: GET https://agentstack.tech/mcp/.well-known/oauth-authorization-server
+        OAuth2 Authorization Code + PKCE flow via the AgentStack OAuth server.
+        API-key authentication remains the simplest Custom GPT setup path.
       flows:
         authorizationCode:
-          authorizationUrl: https://agentstack.tech/mcp/.well-known/oauth-authorize
-          tokenUrl: https://agentstack.tech/mcp/.well-known/oauth-token
+          authorizationUrl: https://agentstack.tech/api/oauth2/authorize
+          tokenUrl: https://agentstack.tech/api/oauth2/token
           scopes:
-            openid: OpenID identity
-            tools:read: Read available MCP tools
-            tools:invoke: Invoke MCP tools
+            mcp:execute: Execute AgentStack MCP actions
+            projects:read: Read projects
+            projects:write: Create or update projects

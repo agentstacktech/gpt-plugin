@@ -2,7 +2,7 @@
 
 Get AgentStack working in ChatGPT in a few steps.
 
-**Flow:** Create an anonymous project (no account) → get API key → add key in Custom GPT Action → use 60+ tools in chat. The MCP server allows `GET /mcp/tools` and `projects.create_project_anonymous` without X-API-Key so you can get a key first.
+**Flow:** Create an anonymous project (no account) → get API key → add key in Custom GPT Action → use `agentstack.execute` with the live AgentStack action catalog in chat. The MCP server allows discovery and `projects.create_project_anonymous` without X-API-Key so you can get a key first.
 
 ## Step 1: Choose authentication mode
 
@@ -44,7 +44,7 @@ curl -X POST https://agentstack.tech/mcp/tools/projects.create_project_anonymous
 
 1. In the Custom GPT editor, open **Actions**.
 2. Under **Schema**, paste the contents of `openapi/agentstack-mcp.yaml` from this repo, or use a URL if you host the schema (e.g. raw GitHub link to the YAML file).
-   - If pasting: ensure the schema uses server URL `https://agentstack.tech` and path `POST /mcp` as in the provided file.
+   - If pasting: ensure the schema uses server URL `https://agentstack.tech` and path `POST /mcp` (`agentstack.execute`). See the main MCP docs for the JSON shape.
 3. Under **Authentication**, choose **API Key**.
    - **Header name:** `X-API-Key`
    - **Key:** paste the API key from Step 1.
@@ -94,9 +94,9 @@ When submitting your app, OpenAI may ask you to justify the **annotations** for 
 
 ## Full tool list and docs
 
-For all 60+ tools (Projects, Auth, Payments, Scheduler, Analytics, Rules, Webhooks, Notifications, Wallets), see:
+For the full generated action list (Projects, Auth, Payments, Scheduler, Analytics, Rules, Webhooks, Notifications, Wallets, Agents, Storage, Support, and more), see:
 
-- [MCP Server Capabilities](https://github.com/agentstacktech/AgentStack/blob/main/docs/MCP_SERVER_CAPABILITIES.md) (in the AgentStack repo)
+- [MCP Capability Matrix](https://github.com/agentstacktech/AgentStack/blob/master/docs/MCP_CAPABILITY_MATRIX.md) (in the AgentStack repo)
 
 ## Self-hosted MCP
 

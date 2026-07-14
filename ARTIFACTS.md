@@ -13,7 +13,7 @@
 | **OpenAPI 3.1 schema** | `openapi/agentstack-mcp.yaml` | Schema for GPT Actions: one operation (execute MCP tool) + API Key auth. Version in `info.version`. |
 | **Custom GPT instructions** | `GPT_INSTRUCTIONS.md` | Context, Instructions, Additional notes — copy into ChatGPT Custom GPT builder. |
 | **Quick Start** | `GPT_QUICKSTART.md` | Steps: get API key → create Custom GPT → add Action → auth → paste instructions → example prompts. |
-| **Overview** | `README.md` | What this integration is, what’s included, links to MCP_SERVER_CAPABILITIES and plugin docs. |
+| **Overview** | `README.md` | What this integration is, what’s included, links to MCP_CAPABILITY_MATRIX and plugin docs. |
 | **Testing** | `TESTING_AND_CAPABILITIES.md` | Manual checklist, scenarios, link to full tool list. |
 | **Changelog** | `CHANGELOG.md` | Keep a Changelog format; version on schema/instructions changes. |
 | **Post-release** | `docs/plugins/GPT_PLUGIN_POST_RELEASE_CHECKLIST.md` (in main repo) | Post-release checklist; do not duplicate in this folder. |

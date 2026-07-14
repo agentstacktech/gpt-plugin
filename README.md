@@ -1,6 +1,6 @@
 # AgentStack — GPT (OpenAI) integration
 
-Integration of **AgentStack** with **ChatGPT** via **GPT Actions**: use a Custom GPT to create projects, manage API keys, get stats, and call 60+ MCP tools.
+Integration of **AgentStack** with **ChatGPT** via **GPT Actions**: use a Custom GPT to create projects, manage API keys, get stats, and call one MCP tool (`agentstack.execute`) whose current actions come from the live `/mcp/actions` catalog.
 
 AgentStack is a full backend ecosystem: 8DNA hierarchical data, Rules Engine, Buffs (trials/subscriptions), Payments, and MCP tools for Projects, Auth, Scheduler, Analytics, Webhooks, Notifications, and Wallets.
 
@@ -24,7 +24,7 @@ AgentStack is a full backend ecosystem: 8DNA hierarchical data, Rules Engine, Bu
 
 ## What you can do
 
-With the Custom GPT and Action configured, you can ask for any of 60+ MCP tools. Example prompts by domain:
+With the Custom GPT and Action configured, you can ask for any action exposed by the generated MCP capability matrix via `agentstack.execute`. Example prompts by domain:
 
 | Domain | Example prompts |
 |--------|-----------------|
@@ -36,14 +36,14 @@ With the Custom GPT and Action configured, you can ask for any of 60+ MCP tools.
 | **Auth** | "Get my profile", "Quick auth with email" |
 | **Scheduler, Analytics, Webhooks, Notifications, Wallets** | "Schedule a task", "Get analytics", "List webhooks" |
 
-**Full tool list and parameters:** [MCP Server Capabilities](https://github.com/agentstacktech/AgentStack/blob/main/docs/MCP_SERVER_CAPABILITIES.md). **When to use which tool:** [CONTEXT_FOR_AI](https://github.com/agentstacktech/AgentStack/blob/main/docs/plugins/CONTEXT_FOR_AI.md) in the AgentStack repo.
+**Full tool list and parameters:** [MCP Capability Matrix](https://github.com/agentstacktech/AgentStack/blob/master/docs/MCP_CAPABILITY_MATRIX.md). **When to use which tool:** [CONTEXT_FOR_AI](https://github.com/agentstacktech/AgentStack/blob/master/docs/plugins/CONTEXT_FOR_AI.md) in the AgentStack repo.
 
 ## Documentation
 
 - **This plugin:** [github.com/agentstacktech/gpt-plugin](https://github.com/agentstacktech/gpt-plugin)
 - **Quick Start:** [GPT_QUICKSTART.md](GPT_QUICKSTART.md)
-- **Full MCP tool list:** [MCP Server Capabilities](https://github.com/agentstacktech/AgentStack/blob/main/docs/MCP_SERVER_CAPABILITIES.md) in the main AgentStack repo
-- **Plugins index and comparison (Cursor, Claude, GPT, VS Code):** [docs/plugins/README.md](https://github.com/agentstacktech/AgentStack/blob/main/docs/plugins/README.md) in the main repo
+- **Full MCP tool list:** [MCP Capability Matrix](https://github.com/agentstacktech/AgentStack/blob/master/docs/MCP_CAPABILITY_MATRIX.md) in the main AgentStack repo
+- **Plugins index and comparison (Cursor, Claude, GPT, VS Code):** [docs/plugins/README.md](https://github.com/agentstacktech/AgentStack/blob/master/docs/plugins/README.md) in the main repo
 
 ## Links
 
