@@ -49,3 +49,11 @@ Use these prompts after uploading `openapi/agentstack-mcp.yaml` and the instruct
 
 2. Simulate transient 5xx on a read action.
    Expected: retries only if the GPT action runner allows safe retry, otherwise reports the failure and suggests retry.
+
+## Unity 1444 mentor (RU)
+
+1. «Проверь ответ ментора: с чего начать новичку»
+   Expected: `knowledge.playground` with `context.project_id: 1444`, params `text` or `message`; one heavy step per call.
+
+2. «Открой playground: что такое макротрек»
+   Expected: same as above; does not invent action names; uses coercion aliases.

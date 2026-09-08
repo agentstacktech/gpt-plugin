@@ -98,10 +98,11 @@ Copy the block below into the **Instructions** field when creating your Custom G
 
 ## Execution rules
 
-1. Discover before unfamiliar mutations: `list_actions` or `GET /mcp/actions`.
-2. Execute with exact action names only — never invent IDs or balances.
-3. On errors, check API key/OAuth, required capability, and params against the live catalog.
-4. Ask explicit confirmation before delete, refund, role changes, API key deletion, or storage delete.
+1. Bootstrap: `GET /mcp/ai_prompt?mode=contract` → `POST /mcp/discover/by_intent` if unsure → `GET /mcp/actions?schemas=hot`.
+2. Discover before unfamiliar mutations: `list_actions` or `GET /mcp/actions`.
+3. Execute with exact action names only — never invent IDs or balances. OAuth tenants: `context.project_id` in execute body.
+4. On errors, check API key/OAuth, required capability, and params against the live catalog.
+5. Ask explicit confirmation before delete, refund, role changes, API key deletion, or storage delete.
 
 
 ## Maintainer overrides
