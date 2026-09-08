@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Moved to templates/chatgpt-mcp-connector.template.json — do not edit this stub.",
+  "moved_to": "templates/chatgpt-mcp-connector.template.json"
+}

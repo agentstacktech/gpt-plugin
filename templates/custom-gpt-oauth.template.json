@@ -1,0 +1,15 @@
+{
+  "name": "AgentStack Backend (OAuth)",
+  "description": "Custom GPT with AgentStack Actions — OAuth2 Authorization Code via ecosystem client.",
+  "schema_url": "https://raw.githubusercontent.com/agentstacktech/gpt-plugin/master/openapi/agentstack-mcp.yaml",
+  "auth": {
+    "type": "oauth2",
+    "authorization_url": "https://agentstack.tech/api/oauth2/authorize",
+    "token_url": "https://agentstack.tech/api/oauth2/token",
+    "scope": "mcp:execute projects:read",
+    "client_id": "<your-oauth-client-id>",
+    "client_secret": "<your-oauth-client-secret>"
+  },
+  "privacy_policy_url": "https://agentstack.tech/privacy",
+  "instructions_file": "instructions/GPT_INSTRUCTIONS.md"
+}

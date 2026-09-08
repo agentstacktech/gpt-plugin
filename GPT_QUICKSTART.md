@@ -4,6 +4,31 @@ Get AgentStack working in ChatGPT in a few steps.
 
 **Flow:** Create an anonymous project (no account) → get API key → add key in Custom GPT Action → use `agentstack.execute` with the live AgentStack action catalog in chat. The MCP server allows discovery and `projects.create_project_anonymous` without X-API-Key so you can get a key first.
 
+**Full map (ChatGPT + Gemini, all integration paths):** [docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md](../../docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md)
+
+---
+
+## Integration paths for ChatGPT (equal priority)
+
+Pick the path that matches your ChatGPT plan and audience — both are first-class:
+
+| Path | Best for | Setup |
+|------|----------|--------|
+| **Custom GPT + GPT Actions** | Plus users, shareable GPT, fastest API-key test | Steps below + [`templates/custom-gpt-apikey.template.json`](./templates/custom-gpt-apikey.template.json) or [`custom-gpt-oauth.template.json`](./templates/custom-gpt-oauth.template.json) |
+| **Native MCP Connector** (Developer Mode) | Business/Enterprise, JSON-RPC in chat | [`templates/chatgpt-mcp-connector.template.json`](./templates/chatgpt-mcp-connector.template.json) · [Guide §4.2](../../docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md#42-chatgpt-mcp-connector-developer-mode) |
+
+**Auth decision tree:**
+
+```
+Need browser OAuth for end users? → Custom GPT Mode B (ecosystem OAuth template)
+Need native MCP in chat?         → Developer Mode (well-known OR X-API-Key header)
+Fastest solo test?               → Custom GPT Mode A (API Key template)
+```
+
+**OpenAI API remote MCP** (your product on Responses API): [Guide §4.3](../../docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md#43-openai-api-responses--remote-mcp)
+
+---
+
 ## Step 1: Choose authentication mode
 
 You can connect AgentStack to Custom GPT in two modes:
@@ -27,7 +52,7 @@ curl -X POST https://agentstack.tech/mcp/tools/projects.create_project_anonymous
   -d '{"params": {"name": "My GPT Project"}}'
 ```
 
-2. From the JSON response, copy `user_api_key` (or `api_key` / `project_api_key`) — you will use it as the API key in Step 3.
+2. From the JSON response, copy `user_api_key` (or `session_token` for Bearer) — shown once at the top level with neutral `bootstrap` metadata (header/field names only). Configure the Custom GPT Action auth header; do not rely on model memory.
 
 **Option B — With account:**
 
@@ -114,7 +139,22 @@ When adding or verifying the Action, OpenAI may show **"Tool scan failed: Intern
 
 1. **Retry** — Run verification again; it often succeeds on a second or third try.
 2. **Server URL** — Use exactly **`https://agentstack.tech/mcp`** as the MCP/server base. Do not add paths like `/tools` or `/mcp/tools`.
-3. **OAuth (Mode B)** — If using OAuth for the Action, set:
-   - **Authorization URL:** `https://agentstack.tech/mcp/.well-known/oauth-authorize`
-   - **Token URL:** `https://agentstack.tech/mcp/.well-known/oauth-token`
-   Use the same Client ID/Secret as for the ecosystem; ensure your GPT’s callback URI is in the allowed redirect URIs.
+3. **OAuth (Mode B)** — Custom GPT Actions use ecosystem OAuth:
+   - **Authorization URL:** `https://agentstack.tech/api/oauth2/authorize`
+   - **Token URL:** `https://agentstack.tech/api/oauth2/token`
+   For **ChatGPT MCP Connector** (Developer Mode), use MCP well-known instead:
+   - `https://agentstack.tech/mcp/.well-known/oauth-authorize`
+   - `https://agentstack.tech/mcp/.well-known/oauth-token`
+   Ensure your GPT callback URI is in allowed redirect URIs (`https://chat.openai.com/aip/g-*/oauth/callback`).
+
+---
+
+## Native MCP Connector (Developer Mode) — short path
+
+1. ChatGPT → Settings → Security and login → **Developer mode** ON.
+2. Settings → Plugins → **Create** → MCP server URL: `https://agentstack.tech/mcp`.
+3. Auth: API Key header `X-API-Key`, or OAuth (well-known URLs above).
+4. Expect **one tool** in the list: `agentstack.execute`.
+5. In chat: **+** → More → select AgentStack.
+
+Details, auth matrix, and troubleshooting: [MCP_CHATGPT_GEMINI_GUIDE_RU.md](../../docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md).

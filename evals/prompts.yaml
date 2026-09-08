@@ -1,0 +1,9 @@
+- id: list_projects
+  prompt: List my AgentStack projects
+  expected_action: projects.get_projects
+- id: anon_project
+  prompt: Create an anonymous project named Browser Demo
+  expected_action: projects.create_project_anonymous
+- id: discover
+  prompt: What AgentStack actions can you call?
+  expected_action: discovery.list

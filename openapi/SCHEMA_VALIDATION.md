@@ -1,15 +1,32 @@
-# OpenAPI schema — GPT Actions compatibility
+# OpenAPI schema validation
 
-**Schema:** `agentstack-mcp.yaml`  
-**Checked against:** [Getting started with GPT Actions](https://developers.openai.com/api/docs/actions/getting-started)
+**SoT:** `agentstack-core/mcp/generate_openapi_gpt.py`
 
-| Requirement | Status |
-|-------------|--------|
-| OpenAPI 3.1.0 | Yes — `openapi: 3.1.0` |
-| `info.title`, `info.description`, `info.version` | Yes — ChatGPT uses description for action relevance |
-| Operation `summary` and `description` | Yes — `execute_tool` has both; model can decide when to call |
-| Request body with clear parameter descriptions | Yes — `tool` (string), `params` (object) with descriptions and examples |
-| Authentication (API Key or OAuth) | Yes — `ApiKeyAuth` in header `X-API-Key`; `security` on operation |
-| Responses (200 and errors) | Yes — 200, 400, 401, 404 described |
+Regenerate:
 
-Schema is compatible with GPT Actions. When adding the Action in Custom GPT, use Authentication type "API Key", header name `X-API-Key`.
+```bash
+export PYTHONPATH="$PWD:$PWD/agentstack-core"   # bash
+python -m mcp.generate_openapi_gpt -o provided_plugins/gpt-plugin/openapi/agentstack-mcp.yaml
+python -m mcp.generate_openapi_gpt -o docs/api/agentstack-mcp-openapi.json --format json
+```
+
+Check:
+
+```bash
+python -m mcp.generate_openapi_gpt -o provided_plugins/gpt-plugin/openapi/agentstack-mcp.yaml --check
+node provided_plugins/scripts/validate-gpt-openapi.mjs
+```
+
+## Required paths
+
+| Path | operationId | Notes |
+|------|-------------|-------|
+| `POST /mcp` | `execute_tool` | `x-openai-isConsequential: true` |
+| `GET /mcp/actions` | `list_actions` | `x-openai-isConsequential: false` |
+
+## Security
+
+- `ApiKeyAuth` (`X-API-Key`)
+- `OAuth2Auth` (ecosystem authorize/token URLs)
+
+Action counts in `info.description` must come from the live registry — no hard-coded `60+` strings.

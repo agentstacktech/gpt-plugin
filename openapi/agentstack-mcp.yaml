@@ -3,11 +3,11 @@ info:
   title: AgentStack MCP API
   description: 'AgentStack backend ecosystem: 8DNA hierarchical data, Rules Engine,
     Buffs (trials/subscriptions), Payments, Agents Fleet, AI Builder, Storage, Support,
-    RAG, and one MCP tool (agentstack.execute). The generated action catalog is the
-    source of truth: call GET /mcp/actions or consult docs/MCP_CAPABILITY_MATRIX.md.
-    Keep this OpenAPI small for GPT Actions: discover first, then execute exact action
-    names through POST /mcp.'
-  version: 0.4.11
+    RAG, and one MCP tool (agentstack.execute). The live action catalog is the source
+    of truth — call GET /mcp/actions, GET /mcp/organs (domain playbooks), or consult
+    docs/MCP_CAPABILITY_MATRIX.md. Keep this OpenAPI small for GPT Actions: discover
+    first, then execute exact action names through POST /mcp.'
+  version: 0.4.18
   contact:
     name: AgentStack
 servers:
@@ -18,10 +18,10 @@ paths:
     post:
       operationId: execute_tool
       summary: Execute an AgentStack MCP tool
-      description: 'Call a registered AgentStack action by exact name with parameters.
-        Discover allowed action names first with list_actions or docs/MCP_CAPABILITY_MATRIX.md.
-        Ask the user for confirmation before destructive, money-moving, or access-changing
-        mutations.'
+      description: Call a registered AgentStack action by exact name with 
+        parameters. Discover allowed action names first with list_actions or 
+        docs/MCP_CAPABILITY_MATRIX.md. Ask the user for confirmation before 
+        destructive, money-moving, or access-changing mutations.
       x-openai-isConsequential: true
       security:
       - ApiKeyAuth: []
@@ -38,12 +38,13 @@ paths:
               properties:
                 tool:
                   type: string
-                  description: Full MCP tool name (e.g. projects.create_project_anonymous,
-                    projects.get_projects).
+                  description: Full MCP tool name (e.g. 
+                    projects.create_project_anonymous, projects.get_projects).
                 params:
                   type: object
-                  description: Key-value parameters for the tool. Schema depends on
-                    the tool; discover via GET /mcp/actions or MCP_CAPABILITY_MATRIX.
+                  description: Key-value parameters for the tool. Schema depends
+                    on the tool; discover via GET /mcp/actions or 
+                    MCP_CAPABILITY_MATRIX.
                   additionalProperties: true
             examples:
               create_project:
@@ -59,7 +60,8 @@ paths:
                   params: {}
       responses:
         '200':
-          description: Tool executed successfully. Response shape depends on the tool.
+          description: Tool executed successfully. Response shape depends on the
+            tool.
           content:
             application/json:
               schema:
@@ -75,7 +77,60 @@ paths:
     get:
       operationId: list_actions
       summary: List available AgentStack MCP actions
-      description: Discovery endpoint for action names, summaries, categories, and required capabilities. Use before executing an unfamiliar action.
+      description: Discovery endpoint for action names, summaries, categories, 
+        and required capabilities. Use before executing an unfamiliar action. 
+        Supports If-None-Match / since_etag conditional GET; optional delta=1 
+        partial body.
+      x-openai-isConsequential: false
+      parameters:
+      - name: since_etag
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Previous catalog_etag; returns 304 when unchanged.
+      - name: delta
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - 'true'
+        description: With stale since_etag, return changed/added rows when 
+          revision known; else full catalog with 
+          delta_fallback=revision_unknown.
+      security:
+      - ApiKeyAuth: []
+      - OAuth2Auth:
+        - mcp:execute
+      responses:
+        '200':
+          description: Action catalog (full, partial delta, or full with 
+            delta_fallback).
+          headers:
+            ETag:
+              schema:
+                type: string
+              description: Current catalog_etag digest.
+            X-Catalog-Delta:
+              schema:
+                type: string
+              description: revision_unknown when delta=1 but prior etag not in 
+                revision store.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '304':
+          description: Catalog unchanged (since_etag or If-None-Match matches).
+  /mcp/organs:
+    get:
+      operationId: list_organs
+      summary: Organ self-description index for MCP domains
+      description: Returns mcp.<domain> organs with genetic tags, MCP prefixes, 
+        and neural_actions (linked playbook prompts). Complements list_actions.
       x-openai-isConsequential: false
       security:
       - ApiKeyAuth: []
@@ -83,27 +138,40 @@ paths:
         - mcp:execute
       responses:
         '200':
-          description: Action catalog returned successfully.
+          description: Organ index returned successfully.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  additionalProperties: true
+                type: object
+                additionalProperties: true
+  /mcp/manifest:
+    get:
+      operationId: get_manifest
+      summary: MCP server manifest for registry publish
+      description: 'Machine-readable server manifest: protocol versions, catalog counts,
+        onboarding pointers.'
+      x-openai-isConsequential: false
+      responses:
+        '200':
+          description: Manifest JSON.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
 components:
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
-      description: API key from AgentStack (anonymous project or account). Get one
-        via MCP_QUICKSTART.
+      description: API key from AgentStack (anonymous project or account). Get 
+        one via MCP_QUICKSTART.
     OAuth2Auth:
       type: oauth2
-      description: >-
-        OAuth2 Authorization Code + PKCE flow via the AgentStack OAuth server.
-        API-key authentication remains the simplest Custom GPT setup path.
+      description: OAuth2 Authorization Code + PKCE flow via the AgentStack 
+        OAuth server. API-key authentication remains the simplest Custom GPT 
+        setup path.
       flows:
         authorizationCode:
           authorizationUrl: https://agentstack.tech/api/oauth2/authorize

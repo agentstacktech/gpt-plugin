@@ -5,6 +5,13 @@ All notable changes to the AgentStack GPT (OpenAI) integration will be documente
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.18] - 2026-09-08
+
+### Changed
+
+- Platform line **0.4.18**: OpenAPI `info.version`, `plugin.json`, and regenerated `instructions/GPT_INSTRUCTIONS.md` via `sync-gpt-instructions.mjs`.
+- Capability routing aligned with live `GET /mcp/actions` catalog (568 public actions).
+
 ## [0.4.0] - 2026-02-23
 
 ### Changed
