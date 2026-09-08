@@ -45,6 +45,17 @@ paths:
                   description: Key-value parameters for the tool. Schema depends on
                     the tool; discover via GET /mcp/actions or MCP_CAPABILITY_MATRIX.
                   additionalProperties: true
+                context:
+                  type: object
+                  description: Optional execute context (OAuth keys often bind to
+                    a default ecosystem project). Use project_id for tenant-scoped
+                    GPTs.
+                  properties:
+                    project_id:
+                      type: integer
+                    user_id:
+                      type: integer
+                  additionalProperties: true
             examples:
               create_project:
                 summary: Create anonymous project
@@ -57,6 +68,14 @@ paths:
                 value:
                   tool: projects.get_projects
                   params: {}
+              knowledge_playground:
+                summary: Mentor playground (tenant project scope)
+                value:
+                  tool: knowledge.playground
+                  params:
+                    text: Привет, я новичок
+                  context:
+                    project_id: 1444
       responses:
         '200':
           description: Tool executed successfully. Response shape depends on the tool.
@@ -120,6 +139,70 @@ paths:
                 additionalProperties: true
         '304':
           description: Catalog unchanged (since_etag or If-None-Match matches).
+  /mcp/ai_prompt:
+    get:
+      operationId: get_ai_prompt
+      summary: Session bootstrap instructions for MCP agents
+      description: Returns system_prompt and discovery pointers. Use mode=contract
+        for slim ~4KB bootstrap; mode=full for workflows and extended pointers.
+      x-openai-isConsequential: false
+      parameters:
+      - name: mode
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - contract
+          - full
+          default: full
+        description: contract = slim bootstrap; full = extended guidance.
+      security:
+      - ApiKeyAuth: []
+      - OAuth2Auth:
+        - mcp:execute
+      responses:
+        '200':
+          description: AI prompt payload.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /mcp/discover/by_intent:
+    post:
+      operationId: discover_by_intent
+      summary: Rank MCP actions for a natural-language goal
+      description: Intent-first discovery when hot-path table is insufficient. Returns
+        ranked intents with primary_tool and instruction_slice hints.
+      x-openai-isConsequential: false
+      security:
+      - ApiKeyAuth: []
+      - OAuth2Auth:
+        - mcp:execute
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - intent
+              properties:
+                intent:
+                  type: string
+                  description: Natural-language user goal.
+                project_id:
+                  type: integer
+                  description: Optional project scope for tenant routing.
+      responses:
+        '200':
+          description: Ranked intent rows.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
   /mcp/organs:
     get:
       operationId: list_organs
