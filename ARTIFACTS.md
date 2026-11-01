@@ -2,6 +2,11 @@
 
 | Artifact | Path |
 |----------|------|
+| Directory manifest | `plugin.json` (Agent Plugins 1.0, `extensions.com.openai`) |
+| Directory MCP | `mcp.json` — remote `https://agentstack.tech/mcp`, Streamable HTTP, OAuth DCR. Not stdio. |
+| Directory skill | `skills/get-started/SKILL.md` |
+| Directory icons | `assets/logo.svg`, `assets/logo-dark.svg` |
+| Submit steps | `DIRECTORY_SUBMIT.md` |
 | OpenAPI (Actions) | `openapi/agentstack-mcp.yaml` |
 | Instructions | `instructions/GPT_INSTRUCTIONS.md` (generated) |
 | Overrides | `instructions/overrides.md` |

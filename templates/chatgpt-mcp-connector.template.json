@@ -2,23 +2,19 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$comment": "Template for ChatGPT Developer Mode MCP Connector. Paste fields into Create app UI; do not commit real API keys.",
   "name": "AgentStack",
-  "description": "Backend-as-a-service for AI agents: projects, 8DNA, rules, payments, agents, hosting, storage. One MCP tool (agentstack.execute). Discover via GET /mcp/actions.",
+  "description": "Work Graph control plane: bound project starts at agents.work_next (recipe mcp_work_loop_v1) via one MCP tool (agentstack.execute). Catalog search is fallback.",
   "mcp_server_url": "https://agentstack.tech/mcp",
   "authentication": {
-    "recommended": "api_key",
-    "api_key": {
-      "header_name": "X-API-Key",
-      "header_value": "<YOUR_AGENTSTACK_API_KEY>"
-    },
+    "recommended": "oauth_mcp_well_known",
     "oauth_mcp_well_known": {
       "authorization_url": "https://agentstack.tech/mcp/.well-known/oauth-authorize",
       "token_url": "https://agentstack.tech/mcp/.well-known/oauth-token",
       "redirect_uri_pattern": "https://chat.openai.com/aip/g-*/oauth/callback"
     },
-    "oauth_ecosystem": {
-      "authorization_url": "https://agentstack.tech/api/oauth2/authorize",
-      "token_url": "https://agentstack.tech/api/oauth2/token",
-      "scopes": ["mcp:execute", "projects:read", "projects:write"]
+    "api_key_automation_only": {
+      "header_name": "X-API-Key",
+      "header_value": "<YOUR_AGENTSTACK_API_KEY>",
+      "note": "Headless automation — not ChatGPT Connect. Use MCP well-known OAuth for chat connector."
     }
   },
   "expected_tools_list": ["agentstack.execute"],

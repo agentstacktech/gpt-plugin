@@ -1,6 +1,8 @@
 # AgentStack — GPT (OpenAI) integration
 
-Integration of **AgentStack** with **ChatGPT** via **GPT Actions**: use a Custom GPT to create projects, manage API keys, get stats, and call one MCP tool (`agentstack.execute`) whose current actions come from the live `/mcp/actions` catalog.
+Installable Agent Plugin for **ChatGPT**, **Codex**, and other Agent Plugins hosts (including **Perplexity**). The connector is remote Streamable HTTP at `https://agentstack.tech/mcp`. There is no local stdio server.
+
+The server exposes one MCP tool, `agentstack.execute`. Action names come from the live `/mcp/actions` catalog. Sign-in is OAuth with dynamic client registration (`/mcp/.well-known/oauth-register`). Custom GPT Actions remain available for a GPT you configure yourself.
 
 AgentStack is a full backend ecosystem: 8DNA hierarchical data, Rules Engine, Buffs (trials/subscriptions), Payments, and MCP tools for Projects, Auth, Scheduler, Analytics, Webhooks, Notifications, and Wallets.
 
@@ -8,6 +10,7 @@ AgentStack is a full backend ecosystem: 8DNA hierarchical data, Rules Engine, Bu
 
 | Item | Description |
 |------|-------------|
+| **Remote MCP** | `mcp.json` — `type: streamable-http`, URL `https://agentstack.tech/mcp`, OAuth DCR. This is the connector ChatGPT, Codex, and Perplexity import. |
 | **OpenAPI schema** | `openapi/agentstack-mcp.yaml` — one action (execute MCP tool) for GPT Actions; supports API Key and OAuth2 auth modes. |
 | **Instructions** | `GPT_INSTRUCTIONS.md` — copy into your Custom GPT Instructions field. |
 | **Quick Start** | `GPT_QUICKSTART.md` — get API key, create Custom GPT, add Action, paste instructions. |
@@ -15,12 +18,13 @@ AgentStack is a full backend ecosystem: 8DNA hierarchical data, Rules Engine, Bu
 
 ## Quick Start
 
-1. Get an API key (anonymous project or account) — see [GPT_QUICKSTART.md](GPT_QUICKSTART.md).
-2. Create a Custom GPT and add an Action with the OpenAPI schema; choose authentication mode:
+1. Install the plugin (ChatGPT, Codex, or Perplexity) so it connects to `https://agentstack.tech/mcp`. Steps: [GPT_QUICKSTART.md](GPT_QUICKSTART.md) and [DIRECTORY_SUBMIT.md](DIRECTORY_SUBMIT.md).
+2. Or, for a Custom GPT you configure yourself, get an API key — see [GPT_QUICKSTART.md](GPT_QUICKSTART.md).
+3. Create a Custom GPT and add an Action with the OpenAPI schema; choose authentication mode:
    - API Key (`X-API-Key`) for service-style access.
    - OAuth2 (AgentStack as IdP) for end-user sign-in.
-3. Paste the instructions from [GPT_INSTRUCTIONS.md](GPT_INSTRUCTIONS.md).
-4. Use the GPT (e.g. “Create a project called Test”, “List my projects”).
+4. Paste the instructions from [GPT_INSTRUCTIONS.md](GPT_INSTRUCTIONS.md).
+5. Use the GPT (e.g. “Create a project called Test”, “List my projects”).
 
 ## What you can do
 

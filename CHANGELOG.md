@@ -5,6 +5,12 @@ All notable changes to the AgentStack GPT (OpenAI) integration will be documente
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Agent Plugins package for ChatGPT, Codex, and other hosts such as Perplexity: root `plugin.json`, remote `mcp.json` (`https://agentstack.tech/mcp`, Streamable HTTP, OAuth DCR), getting-started skill, and square icons. No local stdio server. Custom GPT Actions schema is unchanged. See `DIRECTORY_SUBMIT.md`.
+
 ## [0.4.18] - 2026-09-08
 
 ### Changed

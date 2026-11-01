@@ -8,6 +8,20 @@ Get AgentStack working in ChatGPT in a few steps.
 
 ---
 
+## Remote plugin (ChatGPT, Codex, Perplexity)
+
+The installable package is `plugin.json` + `mcp.json` + `skills/get-started/`. Build and upload steps: [DIRECTORY_SUBMIT.md](DIRECTORY_SUBMIT.md).
+
+`mcp.json` declares one remote server:
+
+| Field | Value |
+|-------|--------|
+| Transport | Streamable HTTP (`streamable-http`) |
+| URL | `https://agentstack.tech/mcp` |
+| Auth | OAuth, dynamic client registration |
+
+Hosts that only offer a **local** connector cannot use that option for this plugin. Local stdio is not in the package. On Perplexity, import the GitHub repo or the ZIP, then choose **Remote** and connect. Sign in with AgentStack when the host opens OAuth. Do not paste an API key into chat.
+
 ## Integration paths for ChatGPT (equal priority)
 
 Pick the path that matches your ChatGPT plan and audience — both are first-class:

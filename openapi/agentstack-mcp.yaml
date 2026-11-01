@@ -7,7 +7,7 @@ info:
     of truth — call GET /mcp/actions, GET /mcp/organs (domain playbooks), or consult
     docs/MCP_CAPABILITY_MATRIX.md. Keep this OpenAPI small for GPT Actions: discover
     first, then execute exact action names through POST /mcp.'
-  version: 0.4.18
+  version: 0.4.24
   contact:
     name: AgentStack
 servers:
@@ -53,8 +53,159 @@ paths:
                   properties:
                     project_id:
                       type: integer
+                      description: Tenant project id. OAuth often binds ecosystem
+                        project 1; set this for a tenant.
                     user_id:
                       type: integer
+                      description: Caller user id. Usually taken from the session.
+                    generation_env_uuid:
+                      type: string
+                      description: Sandbox anchor for this call. Not a recipe input.
+                  additionalProperties: true
+                options:
+                  type: object
+                  description: batch.v1 controls.
+                  properties:
+                    async:
+                      type: boolean
+                      description: Queue; poll discovery.job_status.
+                    workflow_run_id:
+                      type: string
+                      description: Inverse workflow run id.
+                    goal:
+                      type: string
+                      description: Goal text for playbook.
+                    observed:
+                      type: object
+                      description: workflow_runtime.observed echo.
+                      properties:
+                        completed_steps:
+                          type: array
+                          description: Done step ids.
+                          items:
+                            type: string
+                        workflow_revision:
+                          type: integer
+                          description: Cursor revision.
+                        succeeded:
+                          type: array
+                          description: Succeeded actions.
+                          items:
+                            type: string
+                        workflow_state_key:
+                          type: object
+                          description: Guidance binding key.
+                          properties:
+                            workflow_run_id:
+                              type: string
+                              description: Run id.
+                            project_id:
+                              type: integer
+                              description: Project.
+                            principal_id:
+                              type: integer
+                              description: User.
+                            graph_home:
+                              type: string
+                              description: project|user.
+                          additionalProperties: true
+                        goal_verification:
+                          type: object
+                          description: Release criteria.
+                          additionalProperties: true
+                        evidence:
+                          type: object
+                          description: Playbook evidence.
+                          additionalProperties: true
+                        current_step_id:
+                          type: string
+                          description: Active step id.
+                      additionalProperties: true
+                    density:
+                      type: string
+                      description: strict|guided|autonomous
+                      enum:
+                      - strict
+                      - guided
+                      - autonomous
+                    enforce_approval:
+                      type: boolean
+                      description: Pause risky steps.
+                    stopOnError:
+                      type: boolean
+                      description: Stop on first failure.
+                    continueOnError:
+                      type: boolean
+                      description: Continue after failure.
+                    executionMode:
+                      type: string
+                      description: sequential|dag|smart
+                      enum:
+                      - sequential
+                      - dag
+                      - smart
+                    goal_text:
+                      type: string
+                      description: Alias for goal.
+                    focus_node_id:
+                      type: string
+                      description: Graph node from work_next.
+                    plan_execute_mode:
+                      type: boolean
+                      description: Bind plan_execute lane.
+                    execution_intent:
+                      type: string
+                      description: direct | workflow | validate — typed batch lane.
+                      enum:
+                      - direct
+                      - workflow
+                      - validate
+                    routed_goal:
+                      type: object
+                      description: Routed goal snapshot.
+                      properties:
+                        intent_id:
+                          type: string
+                          description: Intent id.
+                        goal_text:
+                          type: string
+                          description: Goal text.
+                        response_mode:
+                          type: string
+                          description: tools|workflow.
+                        step_actions:
+                          type: array
+                          description: Suggested actions.
+                          items:
+                            type: string
+                        semantic_contract:
+                          type: object
+                          description: Effect constraints.
+                          additionalProperties: true
+                      additionalProperties: true
+                    semantic_strict:
+                      type: boolean
+                      description: Enforce goal anchor match.
+                    envelope:
+                      type: string
+                      description: compact (default) | full — ADR MCP_EXECUTE_ENVELOPE_COMPACT_V2
+                      enum:
+                      - compact
+                      - full
+                    instruction_hash:
+                      type: string
+                      description: Batch instruction_packet hash from prior response;
+                        omit duplicate instruction tail when unchanged.
+                    recipe_id:
+                      type: string
+                      description: MCP recipe id.
+                    recipe_params:
+                      type: object
+                      description: Recipe params.
+                      additionalProperties: true
+                    idempotency_key:
+                      type: string
+                      description: Retry receipt key.
                   additionalProperties: true
             examples:
               create_project:
@@ -115,6 +266,19 @@ paths:
           - 'true'
         description: With stale since_etag, return changed/added rows when revision
           known; else full catalog with delta_fallback=revision_unknown.
+      - name: schemas
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - none
+          - public
+          - hot
+          - all
+          default: none
+        description: 'inputSchema attachment: none (default, no JSON schemas), public,
+          hot (descriptor pilots), or all.'
       security:
       - ApiKeyAuth: []
       - OAuth2Auth:
@@ -144,7 +308,7 @@ paths:
       operationId: get_ai_prompt
       summary: Session bootstrap instructions for MCP agents
       description: Returns system_prompt and discovery pointers. Use mode=contract
-        for slim ~4KB bootstrap; mode=full for workflows and extended pointers.
+        for the 8 KiB bootstrap; mode=full for workflows and extended pointers.
       x-openai-isConsequential: false
       parameters:
       - name: mode
@@ -169,7 +333,122 @@ paths:
               schema:
                 type: object
                 additionalProperties: true
+  /mcp/preflight:
+    get:
+      operationId: mcp_preflight
+      summary: Tenant mutation preflight (parity with preflight.check)
+      description: Shared build_preflight_check_data spine — supply, RBAC, optional
+        action risk/effect_policy_allowed. Pass goal_text via MCP tool; REST uses
+        query params.
+      x-openai-isConsequential: false
+      parameters:
+      - name: project_id
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: permission
+        in: query
+        schema:
+          type: string
+      - name: action
+        in: query
+        schema:
+          type: string
+      - name: action_params
+        in: query
+        schema:
+          type: string
+        description: JSON object for FAP path probe
+      - name: path_updates
+        in: query
+        schema:
+          type: string
+        description: JSON array of {path, role?} FAP probes
+      - name: publish_asked
+        in: query
+        schema:
+          type: boolean
+      - name: goal_text
+        in: query
+        schema:
+          type: string
+        description: Goal text for effect_policy probe
+      - name: semantic_contract
+        in: query
+        schema:
+          type: string
+        description: JSON fingerprinted semantic_contract
+      security:
+      - ApiKeyAuth: []
+      - OAuth2Auth:
+        - mcp:execute
+      responses:
+        '200':
+          description: Preflight envelope (PREFLIGHT_CHECK_RETURNS).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
   /mcp/discover/by_intent:
+    get:
+      operationId: discover_by_intent_get
+      summary: Discover by intent (GET, read-only)
+      description: Query-string parity with POST body for intent discovery (q, query,
+        intent, search, project_id, semantic_contract, observed).
+      x-openai-isConsequential: false
+      security:
+      - ApiKeyAuth: []
+      - OAuth2Auth:
+        - mcp:execute
+      parameters:
+      - name: intent
+        in: query
+        schema:
+          type: string
+      - name: query
+        in: query
+        schema:
+          type: string
+      - name: q
+        in: query
+        schema:
+          type: string
+      - name: search
+        in: query
+        schema:
+          type: string
+      - name: category
+        in: query
+        schema:
+          type: string
+      - name: tokens
+        in: query
+        schema:
+          type: string
+      - name: project_id
+        in: query
+        schema:
+          type: integer
+      - name: semantic_contract
+        in: query
+        schema:
+          type: string
+        description: JSON GoalSemanticContract
+      - name: observed
+        in: query
+        schema:
+          type: string
+        description: JSON inverse orchestration slots
+      responses:
+        '200':
+          description: Ranked intent rows.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
     post:
       operationId: discover_by_intent
       summary: Rank MCP actions for a natural-language goal

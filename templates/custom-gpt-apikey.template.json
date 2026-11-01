@@ -1,6 +1,6 @@
 {
-  "name": "AgentStack Backend (API Key)",
-  "description": "Fastest solo test path — Custom GPT Actions with X-API-Key header.",
+  "name": "AgentStack Work Graph (API Key)",
+  "description": "Work Graph MCP — bind project, agents.work_next, then packet.next_action. Custom GPT Actions with X-API-Key.",
   "schema_url": "https://raw.githubusercontent.com/agentstacktech/gpt-plugin/master/openapi/agentstack-mcp.yaml",
   "auth": {
     "type": "api_key",

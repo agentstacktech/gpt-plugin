@@ -1,6 +1,6 @@
 {
-  "name": "AgentStack Backend (OAuth)",
-  "description": "Custom GPT with AgentStack Actions — OAuth2 Authorization Code via ecosystem client.",
+  "name": "AgentStack Work Graph (OAuth)",
+  "description": "Work Graph MCP — bind project, agents.work_next, then packet.next_action. OAuth2 Authorization Code.",
   "schema_url": "https://raw.githubusercontent.com/agentstacktech/gpt-plugin/master/openapi/agentstack-mcp.yaml",
   "auth": {
     "type": "oauth2",

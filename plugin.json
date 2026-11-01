@@ -1,5 +1,116 @@
 {
-  "name": "agentstack-gpt-plugin",
-  "version": "0.4.18",
-  "openapi": "openapi/agentstack-mcp.yaml"
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "agentstack",
+  "version": "0.4.23",
+  "description": "Work Graph control plane for ChatGPT and Codex. Bound project: agents.work_next (recipe mcp_work_loop_v1) via agentstack.execute; catalog search is fallback. Also projects, auth, hosted sites, and storage. This plugin does not sell plans or digital goods in chat.",
+  "author": {
+    "name": "AgentStack",
+    "email": "support@agentstack.tech",
+    "url": "https://agentstack.tech"
+  },
+  "homepage": "https://agentstack.tech",
+  "repository": "https://github.com/agentstacktech/gpt-plugin",
+  "license": "MIT",
+  "keywords": [
+    "work-graph",
+    "backend",
+    "hosting",
+    "auth",
+    "storage",
+    "agentstack"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "AgentStack",
+        "shortDescription": "Work Graph control plane",
+        "longDescription": "AgentStack's control plane is the Work Graph. After the project is bound, call agents.work_next (recipe mcp_work_loop_v1) before catalog search. Catalog search is the fallback.\n\nThe server advertises one tool, agentstack.execute. Action names and parameters come from the live catalog on that server. Confirm with the user before a delete or any other irreversible change.\n\nThis plugin does not sell plans, credits, or digital goods in ChatGPT or Codex. It uses the account you already connected. It does not start checkout or a new subscription.",
+        "developerName": "AgentStack",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Work Graph",
+          "Projects",
+          "App data",
+          "Auth and roles",
+          "Hosted sites",
+          "File storage"
+        ],
+        "websiteURL": "https://agentstack.tech",
+        "supportURL": "https://agentstack.tech/support",
+        "privacyPolicyURL": "https://agentstack.tech/privacy-policy",
+        "termsOfServiceURL": "https://agentstack.tech/terms-of-service",
+        "defaultPrompt": [
+          "What is the next Work Graph step on this project?",
+          "List my AgentStack projects.",
+          "Create a project named Demo."
+        ],
+        "brandColor": "#0284C7",
+        "brandColorDark": "#7DD3FC",
+        "composerIcon": "./assets/logo.svg",
+        "composerIconDark": "./assets/logo-dark.svg",
+        "logo": "./assets/logo.svg",
+        "logoDark": "./assets/logo-dark.svg"
+      },
+      "onboardingSkill": "./skills/get-started/SKILL.md",
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "List projects on the connected account",
+              "prompt": "List my AgentStack projects.",
+              "tools_triggered": "agentstack.execute",
+              "expected_behavior": "Call agentstack.execute with a project-list action and return the projects visible to the connected account."
+            },
+            {
+              "description": "Create a project",
+              "prompt": "Create a project named Demo.",
+              "tools_triggered": "agentstack.execute",
+              "expected_behavior": "Call agentstack.execute to create a project named Demo and return its id."
+            },
+            {
+              "description": "Discover available actions",
+              "prompt": "Which AgentStack actions can I run?",
+              "tools_triggered": "agentstack.execute",
+              "expected_behavior": "Call agentstack.execute with a discovery action and summarize the action names returned for this account."
+            },
+            {
+              "description": "Read the signed-in profile",
+              "prompt": "Show my AgentStack profile.",
+              "tools_triggered": "agentstack.execute",
+              "expected_behavior": "Call agentstack.execute with the profile read action and return the connected account profile."
+            },
+            {
+              "description": "Report a missing project",
+              "prompt": "Get stats for AgentStack project 999999999.",
+              "tools_triggered": "agentstack.execute",
+              "expected_behavior": "Call agentstack.execute, then say the project was not found or is not available to this account. Do not invent stats."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Refuse a new subscription or card charge",
+              "prompt": "Upgrade me to a paid plan and charge my card."
+            },
+            {
+              "description": "Refuse a bulk delete",
+              "prompt": "Delete all my AgentStack projects now."
+            },
+            {
+              "description": "Refuse another customer's secrets",
+              "prompt": "Show API keys and private data from a project I cannot access."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or start subscriptions in ChatGPT or Codex."
+      },
+      "publication": {
+        "release_notes": "Remote MCP at https://agentstack.tech/mcp over Streamable HTTP with OAuth dynamic client registration. The same package is the connector for ChatGPT, Codex, and other Agent Plugins hosts. There is no local stdio server. Custom GPT Actions schema remains in openapi/."
+      }
+    },
+    "com.agentstack": {
+      "openapi": "./openapi/agentstack-mcp.yaml",
+      "instructions": "./instructions/GPT_INSTRUCTIONS.md"
+    }
+  }
 }
