@@ -6,7 +6,7 @@
 | Directory MCP | `mcp.json` — remote `https://agentstack.tech/mcp`, Streamable HTTP, OAuth DCR. Not stdio. |
 | MCP troubleshooting | `MCP_CONNECT.md` — directory vs Actions, Connect checklist |
 | Directory skill | `skills/get-started/SKILL.md` |
-| Directory icons | `assets/logo.svg`, `assets/logo-dark.svg` |
+| Directory icons | `assets/logo.png`, `assets/logo-dark.png` (SVG sources stay beside them; ChatGPT rasterizes the SVG mark as a broken glyph) |
 | Submit steps | `DIRECTORY_SUBMIT.md` |
 | OpenAPI (Actions) | `openapi/agentstack-mcp.yaml` |
 | Instructions | `instructions/GPT_INSTRUCTIONS.md` (generated) |

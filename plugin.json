@@ -46,10 +46,10 @@
         ],
         "brandColor": "#0284C7",
         "brandColorDark": "#7DD3FC",
-        "composerIcon": "./assets/logo.svg",
-        "composerIconDark": "./assets/logo-dark.svg",
-        "logo": "./assets/logo.svg",
-        "logoDark": "./assets/logo-dark.svg"
+        "composerIcon": "./assets/logo.png",
+        "composerIconDark": "./assets/logo-dark.png",
+        "logo": "./assets/logo.png",
+        "logoDark": "./assets/logo-dark.png"
       },
       "onboardingSkill": "./skills/get-started/SKILL.md",
       "review": {
