@@ -7,7 +7,7 @@ info:
     of truth — call GET /mcp/actions, GET /mcp/organs (domain playbooks), or consult
     docs/MCP_CAPABILITY_MATRIX.md. Keep this OpenAPI small for GPT Actions: discover
     first, then execute exact action names through POST /mcp.'
-  version: 0.4.24
+  version: 0.4.26
   contact:
     name: AgentStack
 servers:

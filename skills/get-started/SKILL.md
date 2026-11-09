@@ -5,11 +5,24 @@ description: Use when the user wants an AgentStack project, app data, sign-in, a
 
 # AgentStack
 
-AgentStack is the backend for the user's app. The connector is the remote server `https://agentstack.tech/mcp` (Streamable HTTP). Do not start a local process. The server exposes one tool, `agentstack.execute`.
+AgentStack is the backend for the user's app.
+
+## Directory plugin (native MCP)
+
+This package ships **`mcp.json`** at the plugin root (next to `plugin.json`). The host loads it automatically — do not look for MCP inside `plugin.json`.
+
+| Setting | Value |
+|---------|--------|
+| URL | `https://agentstack.tech/mcp` |
+| Transport | `streamable-http` |
+| Auth | OAuth with dynamic client registration (Connect in the host UI) |
+| Tool | `agentstack.execute` only |
+
+There is **no local stdio** server. If the user only built a Custom GPT with OpenAPI Actions, that is a different setup — point them to `GPT_QUICKSTART.md` for API Key / OAuth2 Actions auth.
 
 ## How to call it
 
-1. If the user is not connected, ask them to connect AgentStack. Do not invent an API key or ask them to paste a password, card number, or one-time code into chat.
+1. If the user is not connected, ask them to use **Connect** on the AgentStack plugin and sign in to AgentStack. Do not invent an API key or ask them to paste a password, card number, or one-time code into chat.
 2. For an unfamiliar action, call `agentstack.execute` with a discovery action first and use only names the catalog returns.
 3. Pass `tool` and `params` for one action per call. Keep `project_id` on follow-up calls when the user is working in one project.
 4. Before a delete or any other irreversible change, restate the target and wait for a clear yes.

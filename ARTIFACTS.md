@@ -4,6 +4,7 @@
 |----------|------|
 | Directory manifest | `plugin.json` (Agent Plugins 1.0, `extensions.com.openai`) |
 | Directory MCP | `mcp.json` — remote `https://agentstack.tech/mcp`, Streamable HTTP, OAuth DCR. Not stdio. |
+| MCP troubleshooting | `MCP_CONNECT.md` — directory vs Actions, Connect checklist |
 | Directory skill | `skills/get-started/SKILL.md` |
 | Directory icons | `assets/logo.svg`, `assets/logo-dark.svg` |
 | Submit steps | `DIRECTORY_SUBMIT.md` |

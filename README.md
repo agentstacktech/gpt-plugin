@@ -10,7 +10,7 @@ AgentStack is a full backend ecosystem: 8DNA hierarchical data, Rules Engine, Bu
 
 | Item | Description |
 |------|-------------|
-| **Remote MCP** | `mcp.json` — `type: streamable-http`, URL `https://agentstack.tech/mcp`, OAuth DCR. This is the connector ChatGPT, Codex, and Perplexity import. |
+| **Remote MCP** | `mcp.json` at plugin root (sibling of `plugin.json`) — `type: streamable-http`, URL `https://agentstack.tech/mcp`, OAuth DCR. Hosts discover MCP from this file, not from `plugin.json`. See [MCP_CONNECT.md](MCP_CONNECT.md). |
 | **OpenAPI schema** | `openapi/agentstack-mcp.yaml` — one action (execute MCP tool) for GPT Actions; supports API Key and OAuth2 auth modes. |
 | **Instructions** | `GPT_INSTRUCTIONS.md` — copy into your Custom GPT Instructions field. |
 | **Quick Start** | `GPT_QUICKSTART.md` — get API key, create Custom GPT, add Action, paste instructions. |
