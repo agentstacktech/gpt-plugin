@@ -22,9 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Regenerated `instructions/GPT_INSTRUCTIONS.md` with ChatGPT-specific auth overrides.
-- `mcp.json` stays `streamable-http`. Type `http` makes ChatGPT count a second server and reject plugin-level `test_cases`. Do not add `.mcp.json`.
+- Removed `.mcp.json` and top-level `mcpServers`; one portable `mcp.json` for ChatGPT and Codex. `.codex-plugin/plugin.json` sets `mcpServers: "./mcp.json"` for the Codex loader.
+- Restored directory `review.test_cases` now that only one MCP manifest ships.
+- Skill listing icons: `skills/get-started/agents/openai.yaml` and `skills/get-started/assets/icon.png` (same mark as `assets/logo.png`).
 - Connector auth is `mixed` with OAuth discovery. The server already answers without a token; an `oauth`-only manifest left the ChatGPT connector uninstalled. The onboarding skill uses that bundled connector and does not ask for a second custom MCP server.
-- Listing icons are `assets/logo.png` and `assets/logo-dark.png`. ChatGPT drops the SVG mark transform and gradient, so the installed plugin showed a broken glyph. One remote server stays in `mcp.json` only.
+- Listing icons are one opaque RGB tile. `logo.png` and `logo-dark.png` are the same file, so the mark does not change after install. The connector icon matches it.
 - `mcp.json` is only `type` and `url`. An OpenAI `extensions` auth block is not in the Agent Plugins MCP schema, so ChatGPT kept the MCP row and did not install the server.
 
 ## [0.4.18] - 2026-09-08

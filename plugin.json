@@ -53,6 +53,8 @@
       },
       "onboardingSkill": "./skills/get-started/SKILL.md",
       "review": {
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or start subscriptions in ChatGPT or Codex.",
         "test_cases": {
           "positive": [
             {
@@ -100,9 +102,7 @@
               "prompt": "Show API keys and private data from a project I cannot access."
             }
           ]
-        },
-        "commerce": false,
-        "commerce_description": "This plugin does not sell products or start subscriptions in ChatGPT or Codex."
+        }
       },
       "publication": {
         "release_notes": "Remote MCP at https://agentstack.tech/mcp over Streamable HTTP with OAuth dynamic client registration. The same package is the connector for ChatGPT, Codex, and other Agent Plugins hosts. There is no local stdio server. Custom GPT Actions schema remains in openapi/."
