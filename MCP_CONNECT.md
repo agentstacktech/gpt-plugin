@@ -6,7 +6,7 @@
 
 | Integration | Files | What the user sees |
 |-------------|-------|-------------------|
-| **Directory plugin** | Root `plugin.json` + **one** `mcp.json` + `skills/` | Native MCP. ChatGPT attaches the server after OAuth Connect. Transport type is `streamable-http` only. Do not add `.mcp.json` and do not set type `http` — either one makes ChatGPT see more than one server and reject plugin-level `test_cases`. |
+| **Directory plugin** | Root `plugin.json` + **one** `mcp.json` + `skills/` | Native MCP. ChatGPT installs the server from `mcp.json` with the plugin. The file is only `type` and `url` (`streamable-http`, `https://agentstack.tech/mcp`). Do not add `.mcp.json`, type `http`, or `extensions` — ChatGPT then drops the server or rejects plugin-level `test_cases`. |
 | **Custom GPT Actions** | `openapi/agentstack-mcp.yaml` | REST `list_actions` / `execute_tool` — **not** the same UI as directory MCP |
 
 If you only created a Custom GPT with Actions and skipped the directory ZIP, the host may show **no MCP connector** — that is expected. Either import the directory package or stay on the Actions path ([GPT_QUICKSTART.md](./GPT_QUICKSTART.md)).
@@ -19,9 +19,9 @@ If you only created a Custom GPT with Actions and skipped the directory ZIP, the
 4. On **MCPs** tab: connect server → OAuth sign-in to AgentStack
 5. Rescan tools — expect one tool: `agentstack.execute`
 
-## Auth (mixed + OAuth discovery)
+## Auth
 
-`mcp.json` sets `auth.type` to `mixed` and `client.mode` to `dcr`. It does not override authorize, token, or register URLs. ChatGPT reads those from the server:
+`mcp.json` does not embed OAuth settings. The Agent Plugins schema allows only `type` and `url` on the server; an `extensions` block makes ChatGPT ignore the server, so the plugin lists MCP and the MCP page stays empty. The live server advertises `noauth` plus `oauth2` on `agentstack.execute` and publishes discovery at:
 
 - `https://agentstack.tech/mcp/.well-known/oauth-protected-resource`
 - `https://agentstack.tech/mcp/.well-known/oauth-authorization-server`
@@ -36,7 +36,7 @@ No API key in `mcp.json`. No fixed `Authorization` header.
 |---------|----------------|-----|
 | No MCP / “local only” | Old ZIP without `mcp.json`, or Actions-only setup | Rebuild ZIP; import directory package |
 | `test_cases require exactly one MCP server` | `mcp.json` type is `http`, or both `mcp.json` and `.mcp.json` exist | One `mcp.json`, type `streamable-http` |
-| Connector listed, not installed | `auth.type` was `oauth` while the server allows anonymous calls, or the skill told the user to add a second server | `auth.type` is `mixed`; enable the plugin's own AgentStack connector |
+| Plugin lists MCP, page has no AgentStack server | `mcp.json` included `extensions` or a second MCP file | One server, only `type` and `url` |
 | Empty tools list | Session not scoped | Retry Connect; probe `tools/list` via [mcp_connector_scan_live_test.py](../../agentstack-core/scripts/mcp_connector_scan_live_test.py) |
 | Works in curl, not in ChatGPT | Wrong path (Actions vs MCP) | Use directory `mcp.json` path above |
 

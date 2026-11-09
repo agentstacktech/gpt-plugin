@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `mcp.json` stays `streamable-http`. Type `http` makes ChatGPT count a second server and reject plugin-level `test_cases`. Do not add `.mcp.json`.
 - Connector auth is `mixed` with OAuth discovery. The server already answers without a token; an `oauth`-only manifest left the ChatGPT connector uninstalled. The onboarding skill uses that bundled connector and does not ask for a second custom MCP server.
 - Listing icons are `assets/logo.png` and `assets/logo-dark.png`. ChatGPT drops the SVG mark transform and gradient, so the installed plugin showed a broken glyph. One remote server stays in `mcp.json` only.
+- `mcp.json` is only `type` and `url`. An OpenAI `extensions` auth block is not in the Agent Plugins MCP schema, so ChatGPT kept the MCP row and did not install the server.
 
 ## [0.4.18] - 2026-09-08
 

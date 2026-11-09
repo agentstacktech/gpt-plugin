@@ -11,7 +11,7 @@ This plugin already includes one remote MCP server. Do not ask the user to add a
 |---------|--------|
 | URL | `https://agentstack.tech/mcp` |
 | Transport | `streamable-http` |
-| Auth | Mixed: tools work before sign-in; OAuth Connect is for the user's account |
+| Auth | The connector installs with the plugin. Calls work before sign-in. Account data uses Connect on this same connector. |
 | Tool | `agentstack.execute` only |
 
 ## First action

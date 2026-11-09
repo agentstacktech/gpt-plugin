@@ -8,7 +8,7 @@ Custom GPT Actions (`openapi/agentstack-mcp.yaml`) stay in this repo for the Act
 
 - `type` is `streamable-http` (Perplexity also accepts this value; do not switch it to `stdio`)
 - `url` is `https://agentstack.tech/mcp`
-- auth is OAuth dynamic client registration, with no API key and no fixed headers in the file
+- no `extensions`, API key, or fixed headers in the file (the schema allows only `type` and `url`)
 
 Perplexity skips local `stdio` servers, servers with no `type`, and servers that require fixed headers. A host that only offers a local connector will report that type as unavailable. Re-import this package so the connector is the remote URL above.
 

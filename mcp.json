@@ -3,18 +3,7 @@
   "mcpServers": {
     "agentstack": {
       "type": "streamable-http",
-      "url": "https://agentstack.tech/mcp",
-      "extensions": {
-        "com.openai": {
-          "auth": {
-            "type": "mixed",
-            "client": {
-              "mode": "dcr"
-            },
-            "baseScopes": ["openid", "tools:read", "tools:invoke"]
-          }
-        }
-      }
+      "url": "https://agentstack.tech/mcp"
     }
   }
 }

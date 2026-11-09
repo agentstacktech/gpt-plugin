@@ -134,7 +134,7 @@ session → context.project_id → agents.work_next → packet.next_action → c
 This is **not** Cursor. Do not mention `~/.cursor/mcp.json`, Device Code, or Connect G-A174 unless the user explicitly says they use Cursor.
 
 1. The installable ZIP / GitHub package includes root **`mcp.json`** next to **`plugin.json`** (Agent Plugins 1.0). Hosts discover MCP from that file — it is not listed inside `plugin.json`.
-2. Auth in `mcp.json` is **mixed**: the bundled connector can be used before sign-in. Account data needs **Connect** on that same AgentStack connector (OAuth discovery, dynamic client registration). Do not paste endpoint overrides or an API key into chat.
+2. `mcp.json` names one remote server and nothing else. ChatGPT installs that server with the plugin. Calls work before sign-in. Account data needs **Connect** on that same AgentStack connector. Do not paste OAuth URLs or an API key into chat.
 3. Remote server: URL `https://agentstack.tech/mcp`, transport **`streamable-http`**, single tool **`agentstack.execute`**. There is **no local stdio** process to start.
 4. If this plugin's connector is disabled, ask the user to enable the AgentStack connector already listed on the plugin and start a new chat. Do not tell them to add a second custom MCP server.
 
