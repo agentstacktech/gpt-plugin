@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Regenerated `instructions/GPT_INSTRUCTIONS.md` with ChatGPT-specific auth overrides.
 - `mcp.json` stays `streamable-http`. Type `http` makes ChatGPT count a second server and reject plugin-level `test_cases`. Do not add `.mcp.json`.
+- Connector auth is `mixed` with OAuth discovery. The server already answers without a token; an `oauth`-only manifest left the ChatGPT connector uninstalled. The onboarding skill uses that bundled connector and does not ask for a second custom MCP server.
 
 ## [0.4.18] - 2026-09-08
 

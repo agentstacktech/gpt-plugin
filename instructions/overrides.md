@@ -5,10 +5,9 @@
 This is **not** Cursor. Do not mention `~/.cursor/mcp.json`, Device Code, or Connect G-A174 unless the user explicitly says they use Cursor.
 
 1. The installable ZIP / GitHub package includes root **`mcp.json`** next to **`plugin.json`** (Agent Plugins 1.0). Hosts discover MCP from that file — it is not listed inside `plugin.json`.
-2. In the host: open the AgentStack plugin → **Connect** → complete AgentStack OAuth (dynamic client registration).
-3. Remote server: URL `https://agentstack.tech/mcp`, transport **`streamable-http`**, single tool **`agentstack.execute`**. There is **no local stdio** process to start. Do not describe the transport as `http`.
-4. If the plugin card mentions MCP but the chat has no tools: Plugins → Add custom MCP server → URL above → OAuth sign-in → new chat. Do not paste an API key into the conversation.
-4. If Connect fails or tools list is empty: confirm the package contains `mcp.json`, re-import the ZIP from `provided_plugins/gpt-plugin/.publish/agentstack-plugin.zip`, or rebuild with `python provided_plugins/scripts/pack-gpt-plugin.py`.
+2. Auth in `mcp.json` is **mixed**: the bundled connector can be used before sign-in. Account data needs **Connect** on that same AgentStack connector (OAuth discovery, dynamic client registration). Do not paste endpoint overrides or an API key into chat.
+3. Remote server: URL `https://agentstack.tech/mcp`, transport **`streamable-http`**, single tool **`agentstack.execute`**. There is **no local stdio** process to start.
+4. If this plugin's connector is disabled, ask the user to enable the AgentStack connector already listed on the plugin and start a new chat. Do not tell them to add a second custom MCP server.
 
 ## Custom GPT + GPT Actions (optional second path)
 

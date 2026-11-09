@@ -19,13 +19,14 @@ If you only created a Custom GPT with Actions and skipped the directory ZIP, the
 4. On **MCPs** tab: connect server → OAuth sign-in to AgentStack
 5. Rescan tools — expect one tool: `agentstack.execute`
 
-## Auth (OAuth DCR)
+## Auth (mixed + OAuth discovery)
 
-Configured in `mcp.json` under `extensions.com.openai.auth`:
+`mcp.json` sets `auth.type` to `mixed` and `client.mode` to `dcr`. It does not override authorize, token, or register URLs. ChatGPT reads those from the server:
 
-- `registrationUrl`: `https://agentstack.tech/mcp/.well-known/oauth-register`
-- `authorizationUrl`: `https://agentstack.tech/mcp/.well-known/oauth-authorize`
-- `tokenUrl`: `https://agentstack.tech/mcp/.well-known/oauth-token`
+- `https://agentstack.tech/mcp/.well-known/oauth-protected-resource`
+- `https://agentstack.tech/mcp/.well-known/oauth-authorization-server`
+
+The server answers `initialize` and `tools/list` without a token. Sign-in is the plugin connector's **Connect** button, not a second custom MCP server.
 
 No API key in `mcp.json`. No fixed `Authorization` header.
 
@@ -35,7 +36,7 @@ No API key in `mcp.json`. No fixed `Authorization` header.
 |---------|----------------|-----|
 | No MCP / “local only” | Old ZIP without `mcp.json`, or Actions-only setup | Rebuild ZIP; import directory package |
 | `test_cases require exactly one MCP server` | `mcp.json` type is `http`, or both `mcp.json` and `.mcp.json` exist | One `mcp.json`, type `streamable-http` |
-| Connect loop / 401 | OAuth not finished | Complete browser sign-in; check ecosystem account |
+| Connector listed, not installed | `auth.type` was `oauth` while the server allows anonymous calls, or the skill told the user to add a second server | `auth.type` is `mixed`; enable the plugin's own AgentStack connector |
 | Empty tools list | Session not scoped | Retry Connect; probe `tools/list` via [mcp_connector_scan_live_test.py](../../agentstack-core/scripts/mcp_connector_scan_live_test.py) |
 | Works in curl, not in ChatGPT | Wrong path (Actions vs MCP) | Use directory `mcp.json` path above |
 
