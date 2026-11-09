@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
-    "agentstack-mcp": {
+    "agentstack": {
       "type": "streamable-http",
       "url": "https://agentstack.tech/mcp"
     }

@@ -54,55 +54,7 @@
       "onboardingSkill": "./skills/get-started/SKILL.md",
       "review": {
         "commerce": false,
-        "commerce_description": "This plugin does not sell products or start subscriptions in ChatGPT or Codex.",
-        "test_cases": {
-          "positive": [
-            {
-              "description": "List projects on the connected account",
-              "prompt": "List my AgentStack projects.",
-              "tools_triggered": "agentstack.execute",
-              "expected_behavior": "Call agentstack.execute with a project-list action and return the projects visible to the connected account."
-            },
-            {
-              "description": "Create a project",
-              "prompt": "Create a project named Demo.",
-              "tools_triggered": "agentstack.execute",
-              "expected_behavior": "Call agentstack.execute to create a project named Demo and return its id."
-            },
-            {
-              "description": "Discover available actions",
-              "prompt": "Which AgentStack actions can I run?",
-              "tools_triggered": "agentstack.execute",
-              "expected_behavior": "Call agentstack.execute with a discovery action and summarize the action names returned for this account."
-            },
-            {
-              "description": "Read the signed-in profile",
-              "prompt": "Show my AgentStack profile.",
-              "tools_triggered": "agentstack.execute",
-              "expected_behavior": "Call agentstack.execute with the profile read action and return the connected account profile."
-            },
-            {
-              "description": "Report a missing project",
-              "prompt": "Get stats for AgentStack project 999999999.",
-              "tools_triggered": "agentstack.execute",
-              "expected_behavior": "Call agentstack.execute, then say the project was not found or is not available to this account. Do not invent stats."
-            }
-          ],
-          "negative": [
-            {
-              "description": "Refuse a new subscription or card charge",
-              "prompt": "Upgrade me to a paid plan and charge my card."
-            },
-            {
-              "description": "Refuse a bulk delete",
-              "prompt": "Delete all my AgentStack projects now."
-            },
-            {
-              "description": "Refuse another customer's secrets",
-              "prompt": "Show API keys and private data from a project I cannot access."
-            }
-          ]
-        }
+        "commerce_description": "This plugin does not sell products or start subscriptions in ChatGPT or Codex."
       },
       "publication": {
         "release_notes": "Remote MCP at https://agentstack.tech/mcp over Streamable HTTP with OAuth dynamic client registration. The same package is the connector for ChatGPT, Codex, and other Agent Plugins hosts. There is no local stdio server. Custom GPT Actions schema remains in openapi/."

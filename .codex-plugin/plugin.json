@@ -1,0 +1,42 @@
+{
+  "name": "agentstack",
+  "version": "0.4.26",
+  "description": "Work Graph control plane for AgentStack. Use the bundled remote MCP connector at https://agentstack.tech/mcp.",
+  "author": {
+    "name": "AgentStack",
+    "email": "support@agentstack.tech",
+    "url": "https://agentstack.tech"
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "AgentStack",
+    "shortDescription": "Work Graph control plane",
+    "longDescription": "Use AgentStack's bundled MCP connector to work with projects, app data, auth, hosted sites, and storage. The connector exposes agentstack.execute. Do not add a second custom MCP server.",
+    "developerName": "AgentStack",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Work Graph",
+      "Projects",
+      "App data",
+      "Auth and roles",
+      "Hosted sites",
+      "File storage"
+    ],
+    "websiteURL": "https://agentstack.tech",
+    "supportURL": "https://agentstack.tech/support",
+    "privacyPolicyURL": "https://agentstack.tech/privacy-policy",
+    "termsOfServiceURL": "https://agentstack.tech/terms-of-service",
+    "defaultPrompt": [
+      "What is the next Work Graph step on this project?",
+      "List my AgentStack projects.",
+      "Create a project named Demo."
+    ],
+    "brandColor": "#0284C7",
+    "brandColorDark": "#7DD3FC",
+    "composerIcon": "./assets/logo.png",
+    "composerIconDark": "./assets/logo-dark.png",
+    "logo": "./assets/logo.png",
+    "logoDark": "./assets/logo-dark.png"
+  }
+}

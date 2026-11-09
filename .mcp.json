@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "agentstack": {
+      "type": "http",
+      "url": "https://agentstack.tech/mcp",
+      "oauth_resource": "https://agentstack.tech/mcp"
+    }
+  }
+}

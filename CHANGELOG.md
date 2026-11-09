@@ -22,9 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Regenerated `instructions/GPT_INSTRUCTIONS.md` with ChatGPT-specific auth overrides.
-- Removed the unused `.codex-plugin` overlay; the portable root `mcp.json` is the single source for ChatGPT and Codex.
-- Renamed the MCP entry from `agentstack` to `agentstack-mcp` to avoid Codex deduplicating it against the already-registered AgentStack app connector.
-- Restored directory `review.test_cases` now that only one MCP manifest ships.
+- Added the required Codex entrypoint `.codex-plugin/plugin.json` and its `.mcp.json` HTTP manifest. Codex's loader does not discover a root `plugin.json` as its plugin entrypoint.
+- Restored the MCP entry name `agentstack`; the root `mcp.json` remains the portable/ChatGPT manifest, while `.mcp.json` is the Codex manifest with `oauth_resource`.
+- Omitted plugin-level `review.test_cases` because the package intentionally ships separate portable and Codex MCP manifests.
 - Skill listing icons: `skills/get-started/agents/openai.yaml` and `skills/get-started/assets/icon.png` (same mark as `assets/logo.png`).
 - Connector auth is `mixed` with OAuth discovery. The server already answers without a token; an `oauth`-only manifest left the ChatGPT connector uninstalled. The onboarding skill uses that bundled connector and does not ask for a second custom MCP server.
 - Listing icons are one opaque RGB tile. `logo.png` and `logo-dark.png` are the same file, so the mark does not change after install. The connector icon matches it.
