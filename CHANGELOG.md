@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Regenerated `instructions/GPT_INSTRUCTIONS.md` with ChatGPT-specific auth overrides.
-- `mcp.json` transport is `http` so ChatGPT attaches the remote server. Only that file declares the server; a second `.mcp.json` makes plugin-level `test_cases` fail.
+- `mcp.json` stays `streamable-http`. Type `http` makes ChatGPT count a second server and reject plugin-level `test_cases`. Do not add `.mcp.json`.
 
 ## [0.4.18] - 2026-09-08
 

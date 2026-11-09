@@ -10,11 +10,11 @@ The backend is one remote MCP server. There is no local process.
 | Setting | Value |
 |---------|--------|
 | URL | `https://agentstack.tech/mcp` |
-| Transport | `http` (Streamable HTTP on that URL) |
+| Transport | `streamable-http` |
 | Auth | OAuth, dynamic client registration |
 | Tool | `agentstack.execute` only |
 
-`plugin.json` does not embed the server. ChatGPT reads the single file **`mcp.json`**. A second MCP file (`.mcp.json`) makes install fail: plugin-level review cases allow exactly one server. If the plugin card mentions MCP but the chat has no tools, the server was not attached.
+`plugin.json` does not embed the server. ChatGPT reads the single file **`mcp.json`**. Its `type` must be `streamable-http`. A second file (`.mcp.json`) or type `http` makes install fail: plugin-level review cases allow exactly one server. If the plugin card mentions MCP but the chat has no tools, finish OAuth Connect and start a new chat.
 
 ## If MCP did not install
 
