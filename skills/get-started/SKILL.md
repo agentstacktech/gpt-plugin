@@ -1,6 +1,6 @@
 ---
 name: get-started
-description: Use on AgentStack setup, Connect, sign-in, or the first project task. Call the bundled agentstack.execute tool. Do not ask the user to add a second MCP server.
+description: Use on AgentStack setup, Connect, sign-in, or the first project task. Authorize first, then call auth.get_profile through the bundled agentstack.execute tool. Do not ask the user to add a second MCP server.
 ---
 
 # AgentStack
@@ -14,9 +14,10 @@ This plugin already includes one remote MCP server. Do not ask the user to add a
 | Auth | The connector installs with the plugin. Calls work before sign-in. Account data uses Connect on this same connector. |
 | Tool | `agentstack.execute` only |
 
-## First action
+## First action: authorize and verify
 
-Call the bundled tool. Do not start by telling the user the connector is missing.
+Authorization is the first step. Do not call discovery, projects, Work Graph, or any
+other action before the auth probe. Use the bundled tool and call:
 
 ```json
 {
@@ -26,8 +27,9 @@ Call the bundled tool. Do not start by telling the user the connector is missing
 }
 ```
 
-- A profile means the connector is installed. Continue with `projects.get_projects`, then `agents.work_next` with `claim: false` and that `context.project_id`.
-- Unauthorized or an anonymous profile means the connector is installed and the user is not signed in. Ask them to open **this plugin's AgentStack connector** and choose **Connect**. After sign-in, call `auth.get_profile` again.
+- A profile with `session_ready` or `mutation_allowed` means authorization succeeded. Then call `projects.get_projects`, bind `context.project_id`, and call `agents.work_next` with `claim: false`.
+- `unauthorized`, `not_authenticated`, or an anonymous profile means the connector is installed but the user is not signed in. Ask them to open **this plugin's AgentStack connector** and choose **Connect**. After sign-in, call `auth.get_profile` again before doing anything else.
+- Do not silently create an anonymous project. Only call `projects.create_project_anonymous` after the user explicitly chooses anonymous bootstrap instead of signing in; preserve its returned `project_id`, `user_api_key`, and `session_token` without displaying secrets.
 - If the host reports that this plugin's connector is disabled, ask them to enable the AgentStack connector that is already on the plugin, then start a new chat. Do not send them to **Add custom MCP server**. A second server is a different connector and leaves this plugin without tools.
 
 ## Later calls

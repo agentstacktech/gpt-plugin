@@ -118,11 +118,12 @@ session → context.project_id → agents.work_next → packet.next_action → c
 
 ## Execution rules
 
-1. Bootstrap: bind `context.project_id`, then `agents.work_next` (recipe `mcp_work_loop_v1`). `GET /mcp/ai_prompt?mode=contract`. `discovery.search` only if no packet. `GET /mcp/actions?schemas=hot` for one action schema.
-2. Discover before unfamiliar mutations: `list_actions` or `GET /mcp/actions`.
-3. Execute with exact action names only — never invent IDs or balances. OAuth tenants: `context.project_id` in execute body.
-4. On errors, check API key/OAuth, required capability, and params against the live catalog.
-5. Ask explicit confirmation before delete, refund, role changes, API key deletion, or storage delete.
+1. **Authorize first:** call `auth.get_profile` after Connect/OAuth, before discovery, project reads, or Work Graph actions. If it returns `unauthorized` or `not_authenticated`, stop and ask the user to authorize.
+2. After authorization, bind `context.project_id`, then call `agents.work_next` (recipe `mcp_work_loop_v1`). `GET /mcp/ai_prompt?mode=contract`. `discovery.search` only if no packet.
+3. Discover before unfamiliar mutations: `list_actions` or `GET /mcp/actions`. Anonymous bootstrap via `projects.create_project_anonymous` is allowed only after the user explicitly chooses it.
+4. Execute with exact action names only — never invent IDs or balances. OAuth tenants: `context.project_id` in execute body.
+5. On errors, check API key/OAuth, required capability, and params against the live catalog.
+6. Ask explicit confirmation before delete, refund, role changes, API key deletion, or storage delete.
 
 
 ## Maintainer overrides
@@ -134,9 +135,9 @@ session → context.project_id → agents.work_next → packet.next_action → c
 This is **not** Cursor. Do not mention `~/.cursor/mcp.json`, Device Code, or Connect G-A174 unless the user explicitly says they use Cursor.
 
 1. The installable ZIP / GitHub package includes root **`mcp.json`** next to **`plugin.json`** (Agent Plugins 1.0). Hosts discover MCP from that file — it is not listed inside `plugin.json`.
-2. `mcp.json` names one remote server and nothing else. ChatGPT installs that server with the plugin. Calls work before sign-in. Account data needs **Connect** on that same AgentStack connector. Do not paste OAuth URLs or an API key into chat.
+2. **Authorize first.** Before discovery, project reads, or Work Graph calls, call `agentstack.execute` with `auth.get_profile` after the host's **Connect/OAuth** flow. If it returns `unauthorized` or `not_authenticated`, stop and ask the user to authorize; do not continue with `projects.*`, `discovery.*`, or `agents.work_next`.
 3. Remote server: URL `https://agentstack.tech/mcp`, transport **`streamable-http`**, single tool **`agentstack.execute`**. There is **no local stdio** process to start.
-4. If this plugin's connector is disabled, ask the user to enable the AgentStack connector already listed on the plugin and start a new chat. Do not tell them to add a second custom MCP server.
+4. An anonymous project is only a fallback after the user explicitly chooses it: use `projects.create_project_anonymous`, preserve its returned credentials, and never print them in chat. If this plugin's connector is disabled, ask the user to enable the AgentStack connector already listed on the plugin and start a new chat. Do not tell them to add a second custom MCP server.
 
 ## Custom GPT + GPT Actions (optional second path)
 

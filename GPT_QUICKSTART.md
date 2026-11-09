@@ -2,7 +2,7 @@
 
 Get AgentStack working in ChatGPT in a few steps.
 
-**Flow:** Create an anonymous project (no account) → get API key → add key in Custom GPT Action → use `agentstack.execute` with the live AgentStack action catalog in chat. The MCP server allows discovery and `projects.create_project_anonymous` without X-API-Key so you can get a key first.
+**Preferred flow:** Sign in with AgentStack/OAuth first → connect the MCP → call `auth.get_profile` → bind a project → use `agentstack.execute`. Anonymous bootstrap is an explicit fallback for users who choose not to sign in, mainly for the Custom GPT Actions/API-key path below.
 
 **Full map (ChatGPT + Gemini, all integration paths):** [docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md](../../docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md)
 

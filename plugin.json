@@ -24,7 +24,7 @@
       "interface": {
         "displayName": "AgentStack",
         "shortDescription": "Work Graph control plane",
-        "longDescription": "AgentStack's control plane is the Work Graph. After the project is bound, call agents.work_next (recipe mcp_work_loop_v1) before catalog search. Catalog search is the fallback.\n\nThe server advertises one tool, agentstack.execute. Action names and parameters come from the live catalog on that server. Confirm with the user before a delete or any other irreversible change.\n\nThis plugin does not sell plans, credits, or digital goods in ChatGPT or Codex. It uses the account you already connected. It does not start checkout or a new subscription.",
+        "longDescription": "AgentStack's control plane is the Work Graph. Authorize first: call auth.get_profile before discovery, project reads, or Work Graph actions. If unauthorized, ask the user to Connect with OAuth; do not silently create an anonymous project. After authorization and project binding, call agents.work_next (recipe mcp_work_loop_v1) before catalog search. Catalog search is the fallback.\n\nThe server advertises one tool, agentstack.execute. Action names and parameters come from the live catalog on that server. Confirm with the user before a delete or any other irreversible change.\n\nThis plugin does not sell plans, credits, or digital goods in ChatGPT or Codex. It uses the account you already connected. It does not start checkout or a new subscription.",
         "developerName": "AgentStack",
         "category": "Developer Tools",
         "capabilities": [

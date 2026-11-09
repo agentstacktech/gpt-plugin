@@ -30,6 +30,13 @@ The server answers `initialize` and `tools/list` without a token. Sign-in is the
 
 No API key in `mcp.json`. No fixed `Authorization` header.
 
+## First MCP action
+
+1. Complete **Connect/OAuth** on this plugin's AgentStack connector.
+2. Call `agentstack.execute` with `auth.get_profile` before discovery, project reads, or Work Graph actions.
+3. If the profile is unauthorized, stop and ask the user to authorize; do not continue with `projects.*`, `discovery.*`, or `agents.work_next`.
+4. Only if the user explicitly chooses anonymous bootstrap, call `projects.create_project_anonymous`. Never display its returned credentials.
+
 ## Troubleshooting
 
 | Symptom | Likely cause | Fix |
