@@ -6,7 +6,7 @@
 
 | Integration | Files | What the user sees |
 |-------------|-------|-------------------|
-| **Directory plugin** | Root `plugin.json` + **`mcp.json`** + `skills/` | Native MCP Connect, OAuth, tool `agentstack.execute` |
+| **Directory plugin** | Root `plugin.json` + **`mcp.json`** + **`.mcp.json`** + `skills/` | Native MCP. ChatGPT attaches the server only after OAuth Connect. Transport type is `http` (Streamable HTTP URL). |
 | **Custom GPT Actions** | `openapi/agentstack-mcp.yaml` | REST `list_actions` / `execute_tool` — **not** the same UI as directory MCP |
 
 If you only created a Custom GPT with Actions and skipped the directory ZIP, the host may show **no MCP connector** — that is expected. Either import the directory package or stay on the Actions path ([GPT_QUICKSTART.md](./GPT_QUICKSTART.md)).

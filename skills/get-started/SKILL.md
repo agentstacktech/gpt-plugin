@@ -1,42 +1,66 @@
 ---
 name: get-started
-description: Use when the user wants an AgentStack project, app data, sign-in, a hosted site, file storage, or a rule. Call the connected MCP tool agentstack.execute and read action names from the live catalog before an unfamiliar write.
+description: Use on AgentStack setup, Connect, sign-in, or the first project task. The host must attach the remote MCP server before any tool call. Teach OAuth Connect, then agentstack.execute.
 ---
 
 # AgentStack
 
-AgentStack is the backend for the user's app.
-
-## Directory plugin (native MCP)
-
-This package ships **`mcp.json`** at the plugin root (next to `plugin.json`). The host loads it automatically — do not look for MCP inside `plugin.json`.
+The backend is one remote MCP server. There is no local process.
 
 | Setting | Value |
 |---------|--------|
 | URL | `https://agentstack.tech/mcp` |
-| Transport | `streamable-http` |
-| Auth | OAuth with dynamic client registration (Connect in the host UI) |
+| Transport | `http` (Streamable HTTP on that URL) |
+| Auth | OAuth, dynamic client registration |
 | Tool | `agentstack.execute` only |
 
-There is **no local stdio** server. If the user only built a Custom GPT with OpenAPI Actions, that is a different setup — point them to `GPT_QUICKSTART.md` for API Key / OAuth2 Actions auth.
+`plugin.json` does not embed the server. ChatGPT reads **`mcp.json`** and **`.mcp.json`** (same server). If the plugin card mentions MCP but the chat has no tools, the server was not attached.
 
-## How to call it
+## If MCP did not install
 
-1. If the user is not connected, ask them to use **Connect** on the AgentStack plugin and sign in to AgentStack. Do not invent an API key or ask them to paste a password, card number, or one-time code into chat.
-2. For an unfamiliar action, call `agentstack.execute` with a discovery action first and use only names the catalog returns.
-3. Pass `tool` and `params` for one action per call. Keep `project_id` on follow-up calls when the user is working in one project.
-4. Before a delete or any other irreversible change, restate the target and wait for a clear yes.
-5. If the server returns not found, unauthorized, or empty, say that. Do not fill the gap with made-up rows.
+Tell the user to do this in ChatGPT, in order:
+
+1. Open **Plugins** (or Settings → Apps / Connectors).
+2. Choose **Add custom MCP server** (plus button). Do not paste an API key into chat.
+3. Server URL: `https://agentstack.tech/mcp`. Authentication: **OAuth** (not a local/stdio connector).
+4. Finish the AgentStack sign-in page. Scopes are `openid`, `tools:read`, `tools:invoke`.
+5. Re-open the AgentStack plugin and confirm the connector is **enabled**. Start a **new** chat.
+
+If Connect fails, say the server did not attach. Do not invent projects, keys, or balances.
+
+## How to call the tool
+
+One action per call:
+
+```json
+{
+  "tool": "auth.get_profile",
+  "params": {},
+  "context": {}
+}
+```
+
+After the user names a project, keep its id:
+
+```json
+{
+  "tool": "agents.work_next",
+  "params": { "claim": false },
+  "context": { "project_id": 123 }
+}
+```
+
+Order for a new session:
+
+1. `auth.get_profile` — who is signed in. If unauthorized, stop and ask them to Connect again.
+2. `projects.get_projects` — list projects. Ask which one if several.
+3. `agents.work_next` with `claim: false` — next step on that project.
+4. Unfamiliar writes: `discovery.search` or `GET /mcp/actions` names only. Never invent action names.
+
+Before delete, refund, role change, or API-key delete, restate the target and wait for a clear yes.
 
 ## Stay inside the request
 
-- Read and change only the account and project the user asked about.
-- Do not start checkout, a new subscription, a credit purchase, or a plan upgrade. If they ask to buy or upgrade, say that is not available in this plugin.
-- Do not print API keys, session tokens, or passwords from a response. Tell the user where the product shows a secret once, and do not repeat it.
-
-## First tasks
-
-- List projects.
-- Create a project when they name one.
-- Store or read a small config value they specify.
-- Publish or inspect a hosted site when they ask for a public URL.
+- Do not start checkout, a new subscription, or a plan upgrade in this plugin.
+- Do not print API keys, session tokens, or passwords. A one-time secret is configured in the product UI, not repeated in chat.
+- Empty, not found, or unauthorized means say that. Do not fill the gap with made-up rows.
