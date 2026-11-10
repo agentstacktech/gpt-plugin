@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `MCP_CONNECT.md` — directory MCP vs Custom GPT Actions, OAuth Connect checklist, troubleshooting.
 - GPT instructions filter Cursor-only auth rows; `get-started` skill documents root `mcp.json`.
 
+### Fixed
+
+- Session probe: instructions and `get-started` skill forbid inventing `agentstack.agentstack.execute` (connector-id double prefix). Call `tools/list` name `agentstack.execute` / `agentstack_execute`. Core accepts the double-prefix as a `tools/call` alias.
+
 ### Changed
 
 - Regenerated `instructions/GPT_INSTRUCTIONS.md` with ChatGPT-specific auth overrides.

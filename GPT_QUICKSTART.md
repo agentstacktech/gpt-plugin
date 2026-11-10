@@ -63,9 +63,9 @@ You can connect AgentStack to Custom GPT in two modes:
 1. Create an anonymous project to get keys (no signup). From a terminal:
 
 ```bash
-curl -X POST https://agentstack.tech/mcp/tools/projects.create_project_anonymous \
+curl -X POST https://agentstack.tech/mcp \
   -H "Content-Type: application/json" \
-  -d '{"params": {"name": "My GPT Project"}}'
+  -d '{"tool": "projects.create_project_anonymous", "params": {"name": "My GPT Project"}}'
 ```
 
 2. From the JSON response, copy `user_api_key` (or `session_token` for Bearer) — shown once at the top level with neutral `bootstrap` metadata (header/field names only). Configure the Custom GPT Action auth header; do not rely on model memory.

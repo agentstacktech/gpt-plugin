@@ -17,7 +17,7 @@ If you only created a Custom GPT with Actions and skipped the directory ZIP, the
 2. ZIP root must include **`mcp.json`** (streamable-http, `https://agentstack.tech/mcp`)
 3. Upload ZIP in the ChatGPT Plugins portal (org owner + developer verification)
 4. On **MCPs** tab: connect server → OAuth sign-in to AgentStack
-5. Rescan tools — expect one tool: `agentstack.execute`
+5. Rescan tools — expect one tool: `agentstack.execute` (never invent `agentstack.agentstack.execute`; that double-prefix is a host namespacing mistake — server accepts it as alias, but call the `tools/list` name)
 
 ## Auth
 
@@ -47,6 +47,7 @@ No API key in `mcp.json`. No fixed `Authorization` header.
 | Newspaper / shield icon after install | Skill lacks `agents/openai.yaml` icons | Ship `skills/get-started/agents/openai.yaml` and `assets/icon.png` |
 | Empty tools list | Session not scoped | Retry Connect; probe `tools/list` via [mcp_connector_scan_live_test.py](../../agentstack-core/scripts/mcp_connector_scan_live_test.py) |
 | Works in curl, not in ChatGPT | Wrong path (Actions vs MCP) | Use directory `mcp.json` path above |
+| Unknown tool `agentstack.agentstack.execute` | Host/model prefixed connector id onto `agentstack.execute` | Call the `tools/list` name `agentstack.execute` (or `agentstack_execute`). Server also accepts the double-prefix as an alias after Core hot-sync. |
 
 ## Live probe (operator)
 

@@ -12,12 +12,27 @@ This plugin already includes one remote MCP server. Do not ask the user to add a
 | URL | `https://agentstack.tech/mcp` |
 | Transport | `streamable-http` |
 | Auth | The connector installs with the plugin. Calls work before sign-in. Account data uses Connect on this same connector. |
-| Tool | `agentstack.execute` only |
+| Tool | `agentstack.execute` only (`tools/list` name) |
 
 ## First action: authorize and verify
 
 Authorization is the first step. Do not call discovery, projects, Work Graph, or any
-other action before the auth probe. Use the bundled tool and call:
+other action before the auth probe.
+
+**Tool name:** use exactly what `tools/list` returns — `agentstack.execute`. Do **not**
+call `agentstack.agentstack.execute` (connector id + tool id double-prefix). Underscore
+form `agentstack_execute` is fine when the host forbids dots.
+
+Arguments for the MCP `tools/call` (or host wrapper) are the execute body:
+
+```json
+{
+  "steps": [{ "id": "auth", "action": "auth.get_profile", "params": {} }],
+  "context": {}
+}
+```
+
+If the host already wraps execute and asks only for the inner action:
 
 ```json
 {
