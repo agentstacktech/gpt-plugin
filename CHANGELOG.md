@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Session probe: instructions and `get-started` skill forbid inventing `agentstack.agentstack.execute` (connector-id double prefix). Call `tools/list` name `agentstack.execute` / `agentstack_execute`. Core accepts the double-prefix as a `tools/call` alias.
+- Codex/ChatGPT auth: human-first Connect ladder in `get-started`, overrides, and manifests; Core returns `auth_choices` for openai directory MCP clients (`mcp_client_family`).
 
 ### Changed
 

@@ -24,7 +24,7 @@
       "interface": {
         "displayName": "AgentStack",
         "shortDescription": "Work Graph control plane",
-        "longDescription": "AgentStack's control plane is the Work Graph. Authorize first: call auth.get_profile before discovery, project reads, or Work Graph actions. If unauthorized, ask the user to Connect with OAuth; do not silently create an anonymous project. After authorization and project binding, call agents.work_next (recipe mcp_work_loop_v1) before catalog search. Catalog search is the fallback.\n\nThe server advertises one tool, agentstack.execute. Action names and parameters come from the live catalog on that server. Confirm with the user before a delete or any other irreversible change.\n\nThis plugin does not sell plans, credits, or digital goods in ChatGPT or Codex. It uses the account you already connected. It does not start checkout or a new subscription.",
+        "longDescription": "AgentStack Work Graph control plane. Authorization is human-first: user Connects the bundled MCP at agentstack.tech (Codex: plugin MCP Connectors → agentstack → Connect), then the agent calls auth.get_profile. Never auth.login, Device Code, or a second MCP server on the directory path. After session_ready, bind context.project_id and call agents.work_next before catalog search.\n\nOne tool: agentstack.execute. Confirm destructive changes with the user. No checkout or subscriptions in chat.",
         "developerName": "AgentStack",
         "category": "Developer Tools",
         "capabilities": [
@@ -40,9 +40,9 @@
         "privacyPolicyURL": "https://agentstack.tech/privacy-policy",
         "termsOfServiceURL": "https://agentstack.tech/terms-of-service",
         "defaultPrompt": [
+          "Help me connect AgentStack (Connect on the bundled MCP, then auth.get_profile).",
           "What is the next Work Graph step on this project?",
-          "List my AgentStack projects.",
-          "Create a project named Demo."
+          "List my AgentStack projects."
         ],
         "brandColor": "#0284C7",
         "brandColorDark": "#7DD3FC",

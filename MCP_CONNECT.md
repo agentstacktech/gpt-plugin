@@ -30,11 +30,18 @@ The server answers `initialize` and `tools/list` without a token. Sign-in is the
 
 No API key in `mcp.json`. No fixed `Authorization` header.
 
-## First MCP action
+## Codex
 
-1. Complete **Connect/OAuth** on this plugin's AgentStack connector.
-2. Call `agentstack.execute` with `auth.get_profile` before discovery, project reads, or Work Graph actions.
-3. If the profile is unauthorized, stop and ask the user to authorize; do not continue with `projects.*`, `discovery.*`, or `agents.work_next`.
+1. Install from `.codex-plugin/plugin.json` (entry) → `.mcp.json` (`http` + `oauth_resource`).
+2. **Plugin → MCP Connectors → agentstack → Connect** — sign in at **https://agentstack.tech**.
+3. Fallback: **https://agentstack.tech/mcp/connect**, then Connect again in Codex.
+4. After the user confirms, call `agentstack.execute` → `auth.get_profile`. Do not use Device Code or `auth.login` on this path.
+
+## First MCP action (all hosts)
+
+1. Human completes **Connect/OAuth** on this plugin's **agentstack** connector (browser login at agentstack.tech).
+2. Agent calls `agentstack.execute` with `auth.get_profile` before discovery, project reads, or Work Graph actions.
+3. If unauthorized, guide Connect again — response may include `auth_choices`; pick **plugin_connect_oauth** or **browser_connect_help**.
 4. Only if the user explicitly chooses anonymous bootstrap, call `projects.create_project_anonymous`. Never display its returned credentials.
 
 ## Troubleshooting

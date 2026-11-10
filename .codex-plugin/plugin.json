@@ -12,7 +12,7 @@
   "interface": {
     "displayName": "AgentStack",
     "shortDescription": "Work Graph control plane",
-    "longDescription": "Authorize first with auth.get_profile through the bundled MCP connector. If unauthorized, ask the user to Connect with OAuth; do not silently create an anonymous project. After authorization, use AgentStack to work with projects, app data, auth, hosted sites, and storage. The connector exposes agentstack.execute. Do not add a second custom MCP server.",
+    "longDescription": "Link AgentStack first: in Codex open this plugin → MCP Connectors → agentstack → Connect and sign in at agentstack.tech (fallback https://agentstack.tech/mcp/connect). Then call auth.get_profile via agentstack.execute. If unauthorized, guide the user through Connect — do not use auth.login, Device Code, or a second MCP server. Do not silently create an anonymous project.",
     "developerName": "AgentStack",
     "category": "Developer Tools",
     "capabilities": [
@@ -28,9 +28,9 @@
     "privacyPolicyURL": "https://agentstack.tech/privacy-policy",
     "termsOfServiceURL": "https://agentstack.tech/terms-of-service",
     "defaultPrompt": [
+      "Help me connect AgentStack (Connect on the bundled MCP, then auth.get_profile).",
       "What is the next Work Graph step on this project?",
-      "List my AgentStack projects.",
-      "Create a project named Demo."
+      "List my AgentStack projects."
     ],
     "brandColor": "#0284C7",
     "brandColorDark": "#7DD3FC",

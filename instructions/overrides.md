@@ -2,16 +2,31 @@
 
 ## MCP connector (ChatGPT, Codex, Perplexity directory plugin)
 
-This is **not** Cursor. Do not mention `~/.cursor/mcp.json`, Device Code, or Connect G-A174 unless the user explicitly says they use Cursor.
+This is **not** Cursor. Do not mention `~/.cursor/mcp.json`, Device Code, `/agentstack-authorize`, or Connect G-A174 unless the user explicitly says they use Cursor.
 
-1. The installable ZIP / GitHub package includes root **`mcp.json`** next to **`plugin.json`** (Agent Plugins 1.0). Hosts discover MCP from that file — it is not listed inside `plugin.json`.
-2. **Authorize first.** Before discovery, project reads, or Work Graph calls, call the bundled MCP tool with `auth.get_profile` after the host's **Connect/OAuth** flow. If it returns `unauthorized` or `not_authenticated`, stop and ask the user to authorize; do not continue with `projects.*`, `discovery.*`, or `agents.work_next`.
-3. Remote server: URL `https://agentstack.tech/mcp`, transport **`streamable-http`**. `tools/list` advertises **one** tool named **`agentstack.execute`**. Call that exact name (or the host's listed synonym such as `agentstack_execute`). **Never** invent `agentstack.agentstack.execute` — that is a connector-id double prefix; the wire name stays `agentstack.execute`. There is **no local stdio** process to start.
-4. An anonymous project is only a fallback after the user explicitly chooses it: use `projects.create_project_anonymous`, preserve its returned credentials, and never print them in chat. If this plugin's connector is disabled, ask the user to enable the AgentStack connector already listed on the plugin and start a new chat. Do not tell them to add a second custom MCP server.
+### Authorization first (human + agent)
+
+OAuth happens **in the host and browser**, not inside your chat reply. On any setup, session check, or `unauthorized` / `not_authenticated`:
+
+1. **Tell the user** to link the bundled connector (pick the path that matches their host — any one is enough):
+   - **Codex:** open the **AgentStack** plugin → **MCP** / **Connectors** → server **agentstack** → **Connect** or **Sign in** → complete login at **https://agentstack.tech** when the browser opens → return to Codex and confirm here.
+   - **ChatGPT (directory plugin):** same — plugin **MCPs** tab → **agentstack** → **Connect** → sign in at agentstack.tech.
+   - **Browser fallback:** **https://agentstack.tech/mcp/connect** (or **https://agentstack.tech/login**), then **Connect** again on the bundled connector.
+2. **Wait** for explicit confirmation ("connected", "signed in", "done") before project reads, Work Graph, or discovery.
+3. **Then** call the bundled MCP tool **`agentstack.execute`** with **`auth.get_profile`**. Success = `session_ready` or `mutation_allowed` in the profile card.
+4. **Stop** on failure: do **not** call `projects.*`, `discovery.*`, or `agents.work_next` until step 3 succeeds.
+
+**Do not** on directory MCP: `auth.login` / collect password in chat, Device Code, paste API keys in chat, add a **second** custom MCP server, or `projects.create_project_anonymous` unless the user explicitly chooses anonymous bootstrap.
+
+### Wire
+
+1. The installable ZIP includes root **`mcp.json`** next to **`plugin.json`** (Agent Plugins 1.0).
+2. Remote server: URL `https://agentstack.tech/mcp`, transport **`streamable-http`**. **`tools/list`** name **`agentstack.execute`** (not `agentstack.agentstack.execute`). Underscore `agentstack_execute` is OK when the host forbids dots.
+3. There is **no local stdio** MCP for this plugin.
 
 ## Custom GPT + GPT Actions (optional second path)
 
-OpenAPI `openapi/agentstack-mcp.yaml` exposes `list_actions` and `execute_tool` over REST — same backend, different host UI. Use **Authentication → API Key** (`X-API-Key`) or OAuth2 templates under `templates/`. That path does not replace directory MCP Connect for hosts that import `plugin.json` + `mcp.json`.
+OpenAPI `openapi/agentstack-mcp.yaml` exposes `list_actions` and `execute_tool` over REST — same backend, different host UI. Use **Authentication → API Key** (`X-API-Key`) or OAuth2 templates under `templates/`. That path does **not** replace directory MCP Connect for hosts that import `plugin.json` + `mcp.json`.
 
 When the user asks "what can AgentStack do?", summarize domains and point to `GET /mcp/actions` for the live catalog — do not quote stale action counts from memory.
 
