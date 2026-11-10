@@ -86,7 +86,6 @@ Copy the block below into the **Instructions** field when creating your Custom G
 - **Schedule cron job** → `scheduler.create_task`, `scheduler.list_tasks`, `scheduler.cancel_task`
 - **Upload files / quota** → `storage.get_quota`, `storage.list_files` + REST `POST /api/storage/upload`
 - **Marketplace / auction / exchange** → `GET /mcp/actions` domain **`commerce_rest`** (path hints only)
-- **Login / register / get profile** → `auth.login`, `auth.register`, `auth.get_profile`, `auth.update_profile`
 - **Assets / inventory** → `assets.create`, `assets.list`
 - **Analytics / dashboard KPIs** → `analytics.project_snapshot`
 - **API keys (project)** → `apikeys.list`, `apikeys.create`, `apikeys.delete`
@@ -118,7 +117,7 @@ session → context.project_id → agents.work_next → packet.next_action → c
 
 ## Execution rules
 
-1. **Authorize first:** call `auth.get_profile` after Connect/OAuth, before discovery, project reads, or Work Graph actions. If it returns `unauthorized` or `not_authenticated`, stop and ask the user to authorize.
+1. **Authorize first:** call `auth.get_profile` after Connect/OAuth, before discovery, project reads, or Work Graph actions. On `unauthorized` / `not_authenticated`, read `auth_choices` and `pick_one` from the MCP response — guide the human through **Connect** (never `auth.login` on directory MCP).
 2. After authorization, bind `context.project_id`, then call `agents.work_next` (recipe `mcp_work_loop_v1`). `GET /mcp/ai_prompt?mode=contract`. `discovery.search` only if no packet.
 3. Discover before unfamiliar mutations: `list_actions` or `GET /mcp/actions`. Anonymous bootstrap via `projects.create_project_anonymous` is allowed only after the user explicitly chooses it.
 4. Execute with exact action names only — never invent IDs or balances. OAuth tenants: `context.project_id` in execute body.
@@ -144,7 +143,8 @@ OAuth happens **in the host and browser**, not inside your chat reply. On any se
    - **Browser fallback:** **https://agentstack.tech/mcp/connect** (or **https://agentstack.tech/login**), then **Connect** again on the bundled connector.
 2. **Wait** for explicit confirmation ("connected", "signed in", "done") before project reads, Work Graph, or discovery.
 3. **Then** call the bundled MCP tool **`agentstack.execute`** with **`auth.get_profile`**. Success = `session_ready` or `mutation_allowed` in the profile card.
-4. **Stop** on failure: do **not** call `projects.*`, `discovery.*`, or `agents.work_next` until step 3 succeeds.
+4. **On failure:** use structured **`auth_choices`** and **`pick_one`** from the response (also on `auth_surface.client_auth_ladder`) — surface the chosen human step verbatim; do not invent Device Code or `auth.login`.
+5. **Stop** until step 3 succeeds: no `projects.*`, `discovery.*`, or `agents.work_next`.
 
 **Do not** on directory MCP: `auth.login` / collect password in chat, Device Code, paste API keys in chat, add a **second** custom MCP server, or `projects.create_project_anonymous` unless the user explicitly chooses anonymous bootstrap.
 

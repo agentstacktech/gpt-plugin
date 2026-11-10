@@ -68,4 +68,4 @@ Set `AGENTSTACK_API_KEY` or complete OAuth out-of-band for authenticated `tools/
 
 - [DIRECTORY_SUBMIT.md](./DIRECTORY_SUBMIT.md)
 - [docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md](../../docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md)
-- [MCP_QUICKSTART.md](./MCP_QUICKSTART.md) (Actions path)
+- [GPT_QUICKSTART.md](./GPT_QUICKSTART.md) (Actions path)

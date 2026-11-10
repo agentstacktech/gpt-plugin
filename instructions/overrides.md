@@ -14,7 +14,8 @@ OAuth happens **in the host and browser**, not inside your chat reply. On any se
    - **Browser fallback:** **https://agentstack.tech/mcp/connect** (or **https://agentstack.tech/login**), then **Connect** again on the bundled connector.
 2. **Wait** for explicit confirmation ("connected", "signed in", "done") before project reads, Work Graph, or discovery.
 3. **Then** call the bundled MCP tool **`agentstack.execute`** with **`auth.get_profile`**. Success = `session_ready` or `mutation_allowed` in the profile card.
-4. **Stop** on failure: do **not** call `projects.*`, `discovery.*`, or `agents.work_next` until step 3 succeeds.
+4. **On failure:** use structured **`auth_choices`** and **`pick_one`** from the response (also on `auth_surface.client_auth_ladder`) — surface the chosen human step verbatim; do not invent Device Code or `auth.login`.
+5. **Stop** until step 3 succeeds: no `projects.*`, `discovery.*`, or `agents.work_next`.
 
 **Do not** on directory MCP: `auth.login` / collect password in chat, Device Code, paste API keys in chat, add a **second** custom MCP server, or `projects.create_project_anonymous` unless the user explicitly chooses anonymous bootstrap.
 
