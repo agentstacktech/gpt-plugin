@@ -1,3 +1,4 @@
+auth_connect: auth.get_profile
 list_projects: projects.get_projects
 anon_project: projects.create_project_anonymous
 discover: discovery.list

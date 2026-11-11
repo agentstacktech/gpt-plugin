@@ -1,11 +1,24 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$comment": "Template for ChatGPT Developer Mode MCP Connector. Paste fields into Create app UI; do not commit real API keys.",
+  "$comment": "Template for ChatGPT Developer Mode MCP Connector. Paste fields into Create app UI; do not commit real API keys. Agent Plugins directory ZIP uses host Connect — see MCP_CONNECT.md.",
   "name": "AgentStack",
   "description": "Work Graph control plane: bound project starts at agents.work_next (recipe mcp_work_loop_v1) via one MCP tool (agentstack.execute). Catalog search is fallback.",
   "mcp_server_url": "https://agentstack.tech/mcp",
+  "auth_ladder": {
+    "human_first": true,
+    "agent_probe": "auth.get_profile",
+    "forbid_on_directory_mcp": ["auth.login", "device_code"],
+    "choices": [
+      "plugin_connect_oauth",
+      "browser_connect_help",
+      "existing_account_login",
+      "custom_gpt_api_key"
+    ],
+    "note": "Alternatives — not a sequence. Human Connect first, then agent auth.get_profile."
+  },
   "authentication": {
     "recommended": "oauth_mcp_well_known",
+    "directory_plugin_note": "Agent Plugins ZIP: OAuth via host Connect — see MCP_CONNECT.md (First MCP action).",
     "oauth_mcp_well_known": {
       "authorization_url": "https://agentstack.tech/mcp/.well-known/oauth-authorize",
       "token_url": "https://agentstack.tech/mcp/.well-known/oauth-token",
@@ -14,7 +27,7 @@
     "api_key_automation_only": {
       "header_name": "X-API-Key",
       "header_value": "<YOUR_AGENTSTACK_API_KEY>",
-      "note": "Headless automation — not ChatGPT Connect. Use MCP well-known OAuth for chat connector."
+      "note": "Custom GPT / headless automation only — not Agent Plugins directory ZIP (use Connect + auth.get_profile)."
     }
   },
   "expected_tools_list": ["agentstack.execute"],

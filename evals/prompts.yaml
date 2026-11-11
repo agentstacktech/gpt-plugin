@@ -1,9 +1,21 @@
+# Directory MCP eval prompts (agentstack.execute). Host Connect is human-first — see MCP_CONNECT.md.
+- id: auth_connect
+  channel: directory_mcp
+  host_step: connect
+  prompt: I finished Connect on the AgentStack MCP connector. Verify my session before anything else.
+  expected_action: auth.get_profile
+  forbidden_action: auth.login
 - id: list_projects
+  channel: directory_mcp
   prompt: List my AgentStack projects
   expected_action: projects.get_projects
 - id: anon_project
-  prompt: Create an anonymous project named Browser Demo
+  channel: directory_mcp
+  prompt: I do not want to sign in. Create an anonymous project named Browser Demo without signup.
   expected_action: projects.create_project_anonymous
+  forbidden_action: auth.login
 - id: discover
-  prompt: What AgentStack actions can you call?
+  channel: directory_mcp
+  prompt: What MCP actions can you call through agentstack.execute?
   expected_action: discovery.list
+  forbidden_action: auth.login

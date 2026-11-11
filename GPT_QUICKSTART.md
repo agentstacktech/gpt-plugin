@@ -1,14 +1,18 @@
-# AgentStack GPT — Quick Start (ChatGPT Custom GPT)
+# AgentStack GPT — Quick Start
 
 Get AgentStack working in ChatGPT in a few steps.
 
-**Preferred flow:** Sign in with AgentStack/OAuth first → connect the MCP → call `auth.get_profile` → bind a project → use `agentstack.execute`. Anonymous bootstrap is an explicit fallback for users who choose not to sign in, mainly for the Custom GPT Actions/API-key path below.
+**Preferred flow (directory MCP):** import the plugin ZIP → human **Connect** on **agentstack** → agent calls `auth.get_profile` → bind `context.project_id` → `agents.work_next` / `agentstack.execute`. Details: [MCP_CONNECT.md](MCP_CONNECT.md).
+
+**Custom GPT Actions** (below) is a second path — API key or ecosystem OAuth on your own GPT via OpenAPI; it does not replace directory Connect.
+
+**Anonymous project bootstrap** (`projects.create_project_anonymous`) is **Actions-only** — for directory MCP, use **Connect** instead unless the user explicitly refuses sign-in ([MCP_CONNECT.md](MCP_CONNECT.md)).
 
 **Full map (ChatGPT + Gemini, all integration paths):** [docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md](../../docs/plugins/MCP_CHATGPT_GEMINI_GUIDE_RU.md)
 
 ---
 
-## Remote plugin (ChatGPT, Codex, Perplexity)
+## Directory plugin — Connect first (ChatGPT, Codex, Perplexity)
 
 The installable package is `plugin.json` + `mcp.json` + `skills/get-started/`. Build and upload steps: [DIRECTORY_SUBMIT.md](DIRECTORY_SUBMIT.md).
 
@@ -22,11 +26,15 @@ The installable package is `plugin.json` + `mcp.json` + `skills/get-started/`. B
 
 Hosts that only offer a **local** connector cannot use that option for this plugin. Local stdio is not in the package. On Perplexity, import the GitHub repo or the ZIP, then choose **Remote** and connect. Sign in with AgentStack when the host opens OAuth. Do not paste an API key into chat.
 
-**“No MCP” in the host?** You may have set up **Custom GPT Actions only** (OpenAPI) without importing the directory ZIP. Actions and directory MCP are two paths — see [MCP_CONNECT.md](MCP_CONNECT.md).
+1. Upload/install the ZIP ([DIRECTORY_SUBMIT.md](DIRECTORY_SUBMIT.md)).
+2. Open the host **MCP** / **MCPs** tab → connector **agentstack** → **Connect** → sign in at **https://agentstack.tech**.
+3. In chat: confirm Connect done → probe with `auth.get_profile` before discovery or project reads.
 
-## Integration paths for ChatGPT (equal priority)
+**“No MCP” in the host?** You may have set up **Custom GPT Actions only** (OpenAPI) without importing the directory ZIP. Actions and directory MCP are two paths — continue with [Custom GPT Actions](#custom-gpt-actions-openapi) below or switch to [MCP_CONNECT.md](MCP_CONNECT.md).
 
-Pick the path that matches your ChatGPT plan and audience — both are first-class:
+## Custom GPT Actions (OpenAPI)
+
+Pick the path that matches your ChatGPT plan and audience — directory Connect above is recommended when the host supports the plugin ZIP:
 
 | Path | Best for | Setup |
 |------|----------|--------|
@@ -58,7 +66,7 @@ You can connect AgentStack to Custom GPT in two modes:
 
 ### A1. Get an API key
 
-**Option A — No account (try first):**
+**Option A — No account (Actions-only; not for directory MCP Connect):**
 
 1. Create an anonymous project to get keys (no signup). From a terminal:
 

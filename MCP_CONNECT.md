@@ -41,7 +41,7 @@ No API key in `mcp.json`. No fixed `Authorization` header.
 
 1. Human completes **Connect/OAuth** on this plugin's **agentstack** connector (browser login at agentstack.tech).
 2. Agent calls `agentstack.execute` with `auth.get_profile` before discovery, project reads, or Work Graph actions.
-3. If unauthorized, guide Connect again — response may include `auth_choices`; pick **plugin_connect_oauth** or **browser_connect_help**.
+3. If unauthorized, guide Connect again — on **401/403** from `agentstack.execute`, read `auth_choices`, `pick_one`, and `auth_surface.client_auth_ladder`; surface one human step. Do not call `auth.login` or Device Code on directory MCP.
 4. Only if the user explicitly chooses anonymous bootstrap, call `projects.create_project_anonymous`. Never display its returned credentials.
 
 ## Troubleshooting
@@ -53,6 +53,7 @@ No API key in `mcp.json`. No fixed `Authorization` header.
 | Plugin lists MCP, page has no AgentStack server | Codex loaded root `plugin.json` but did not find its required `.codex-plugin/plugin.json` entrypoint | Ship `.codex-plugin/plugin.json` → `.mcp.json`; server keys only the documented HTTP fields; restart Codex after ZIP install |
 | Newspaper / shield icon after install | Skill lacks `agents/openai.yaml` icons | Ship `skills/get-started/agents/openai.yaml` and `assets/icon.png` |
 | Empty tools list | Session not scoped | Retry Connect; probe `tools/list` via [mcp_connector_scan_live_test.py](../../agentstack-core/scripts/mcp_connector_scan_live_test.py) |
+| Unauthorized after Connect | Connector still unsigned or stale token | Pick `plugin_connect_oauth` or `browser_connect_help` from `auth_choices`; re-probe with `auth.get_profile` |
 | Works in curl, not in ChatGPT | Wrong path (Actions vs MCP) | Use directory `mcp.json` path above |
 | Unknown tool `agentstack.agentstack.execute` | Host/model prefixed connector id onto `agentstack.execute` | Call the `tools/list` name `agentstack.execute` (or `agentstack_execute`). Server also accepts the double-prefix as an alias after Core hot-sync. |
 
