@@ -21,7 +21,8 @@ Copy the block below into the **Instructions** field when creating your Custom G
 - **Compass playbook / what next / start_path** → `guidance.*` — never static route guessing
 - **where in UI / PAGES_MAP / Discover hub** → UI manifest — never `guidance.start_path`
 - **store, data, config, 8DNA leaves** → `projects.patch_data`, `data_access.*`
-- **sandbox / canary / generation fork / X-AgentStack-Env** → `generation.*`
+- **sandbox / canary / generation fork / X-AgentStack-Env** → `generation.*` — 8DNA only, not git
+- **git push / push to dev / delete branches / promote a site** → remote `agentstack`, branch `dev`. Not `generation.promote`. Not `git push origin`
 - **publish site, /s/ URL, ZIP deploy** → `hosting.*`
 - **edit one file on live /s/ site (CSS/HTML/JS)** → `hosting.bucket.file.patch` (`search_replace`) — **not** `storage.upload` or `projects.patch_data`
 - **EDITFLOW / hosted vertical / workspace SaaS / `/s/*/editflow/`** → `@agentstack/hosted-wire` + `tenantApi` — not custom backend

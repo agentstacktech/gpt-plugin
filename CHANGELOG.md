@@ -5,6 +5,12 @@ All notable changes to the AgentStack GPT (OpenAI) integration will be documente
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.27] - 2026-11-11
+
+### Changed
+
+- OpenAPI `info.version` and plugin.json **0.4.27** — Flow Spine execute guidance + directory auth ladder tests.
+
 ## [0.4.26] - 2026-11-04
 
 ### Changed

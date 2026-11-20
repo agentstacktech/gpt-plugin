@@ -1,6 +1,6 @@
 {
   "name": "agentstack",
-  "version": "0.4.26",
+  "version": "0.4.27",
   "description": "Work Graph control plane for AgentStack. Use the bundled remote MCP connector at https://agentstack.tech/mcp.",
   "author": {
     "name": "AgentStack",
